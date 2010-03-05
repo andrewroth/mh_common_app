@@ -1,4 +1,4 @@
 class Person < ActiveRecord::Base
   load_mappings
-  include Common::Person
+  include Common::Core::Person
 end
