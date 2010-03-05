@@ -114,7 +114,14 @@ class ActiveSupport::TestCase
     Factory(:ministrycampus_2)
     Factory(:country_1)
   end
-  
+
+  def setup_n_people(n)
+    reset_people_sequences
+    1.upto(n + 1) do |i|
+      Factory(:person)
+    end
+  end
+
   def setup_n_campus_involvements(n)
     reset_campus_involvements_sequences
     1.upto(n + 1) do |i| 

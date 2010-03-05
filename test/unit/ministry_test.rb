@@ -53,7 +53,4 @@ class MinistryTest < ActiveSupport::TestCase
     assert_equal([@m[2], @m[3]], @m[2].self_plus_descendants)
   end
   
-  def test_create_first_view
-    assert_equal(View.find(:first).title, Ministry.create(:name => 'blah').views.first.title)
-  end
 end

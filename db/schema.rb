@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100303202104) do
+ActiveRecord::Schema.define(:version => 20100305163625) do
 
   create_table "addresses", :force => true do |t|
     t.integer "person_id"
@@ -106,33 +106,6 @@ ActiveRecord::Schema.define(:version => 20100303202104) do
     t.datetime "updated_at"
   end
 
-  create_table "correspondence_types", :force => true do |t|
-    t.string  "name"
-    t.integer "overdue_lifespan"
-    t.integer "expiry_lifespan"
-    t.string  "actions_now_task"
-    t.string  "actions_overdue_task"
-    t.string  "actions_followup_task"
-    t.text    "redirect_params"
-    t.string  "redirect_target_id_type"
-  end
-
-  create_table "correspondences", :force => true do |t|
-    t.integer  "correspondence_type_id"
-    t.integer  "person_id"
-    t.string   "receipt"
-    t.string   "state"
-    t.date     "visited"
-    t.date     "completed"
-    t.date     "overdue_at"
-    t.date     "expire_at"
-    t.text     "token_params"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "correspondences", ["receipt"], :name => "index_correspondences_on_receipt"
-
   create_table "counties", :force => true do |t|
     t.string "name"
     t.string "state"
@@ -144,6 +117,8 @@ ActiveRecord::Schema.define(:version => 20100303202104) do
     t.string  "country"
     t.string  "code"
     t.boolean "is_closed"
+    t.string  "iso_code"
+    t.boolean "closed",    :default => false
   end
 
   create_table "custom_attributes", :force => true do |t|
@@ -183,19 +158,6 @@ ActiveRecord::Schema.define(:version => 20100303202104) do
 
   add_index "dorms", ["campus_id"], :name => "index_dorms_on_campus_id"
 
-  create_table "email_templates", :force => true do |t|
-    t.integer  "correspondence_type_id"
-    t.string   "outcome_type"
-    t.string   "subject",                :null => false
-    t.string   "from",                   :null => false
-    t.string   "bcc"
-    t.string   "cc"
-    t.text     "body",                   :null => false
-    t.text     "template"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "emails", :force => true do |t|
     t.string   "subject"
     t.text     "body"
@@ -217,8 +179,6 @@ ActiveRecord::Schema.define(:version => 20100303202104) do
     t.string   "css_class"
     t.decimal  "weight",       :precision => 4, :scale => 2
   end
-
-  add_index "free_times", ["timetable_id"], :name => "free_times_timetable_id"
 
   create_table "group_involvements", :force => true do |t|
     t.integer "person_id"
@@ -385,27 +345,6 @@ ActiveRecord::Schema.define(:version => 20100303202104) do
     t.string "controller"
     t.string "action"
   end
-
-  create_table "person_extras", :force => true do |t|
-    t.integer "person_id"
-    t.string  "major"
-    t.string  "minor"
-    t.string  "url"
-    t.string  "staff_notes"
-    t.string  "updated_at"
-    t.string  "updated_by"
-    t.date    "perm_start_date"
-    t.date    "perm_end_date"
-    t.string  "perm_dorm"
-    t.string  "perm_room"
-    t.string  "perm_alternate_phone"
-    t.date    "curr_start_date"
-    t.date    "curr_end_date"
-    t.string  "curr_dorm"
-    t.string  "curr_room"
-  end
-
-  add_index "person_extras", ["person_id"], :name => "index_person_extras_on_person_id"
 
   create_table "profile_pictures", :force => true do |t|
     t.integer "person_id"
