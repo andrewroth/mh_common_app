@@ -74,11 +74,13 @@ namespace :test do
     end
     
     namespace :plugin do
-      desc "Runs coverage on unit tests"
+      desc "Runs coverage on a plugin's unit tests, must set PLUGIN=[plugin name]"
       task :units do
         if ENV['PLUGIN']
           params = %|--exclude "^(?!(#{ENV['PLUGIN']}))" --include-file /#{ENV['PLUGIN']}/|
           run_coverage Dir["test/unit/**/*.rb"], params
+        else
+          puts "Must set PLUGIN=[plugin name]"
         end
       end
     end
