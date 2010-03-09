@@ -21,6 +21,11 @@ class MinistryTest < ActiveSupport::TestCase
       Factory(:campus_3)
       @data_loaded = true
     end
+
+    setup_ministry_roles
+    setup_people
+    setup_ministry_involvements
+    setup_ministry_roles
   end
 
   def setup
@@ -52,5 +57,28 @@ class MinistryTest < ActiveSupport::TestCase
   def test_self_plus_descendants
     assert_equal([@m[2], @m[3]], @m[2].self_plus_descendants)
   end
-  
+
+  def test_staff
+    assert_equal Ministry.find(1).staff, [ Person.find(50000) ]
+  end
+
+  def test_leaders
+    assert_equal Ministry.find(1).leaders, [ Person.find(50000) ]
+  end
+
+  def test_ministry_roles
+    assert_equal Ministry.find(1).ministry_roles, MinistryRole.find_all_by_ministry_id(1)
+  end
+
+  def test_staff_roles
+    assert_equal Ministry.find(1).staff_roles, StaffRole.find_all_by_ministry_id(1)
+  end
+
+  def test_student_roles
+    assert_equal Ministry.find(1).student_roles, StudentRole.find_all_by_ministry_id(1)
+  end
+
+  def test_other_roles
+    assert_equal Ministry.find(1).other_roles, OtherRole.find_all_by_ministry_id(1)
+  end
 end
