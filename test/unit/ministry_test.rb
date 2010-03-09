@@ -100,4 +100,16 @@ class MinistryTest < ActiveSupport::TestCase
   def test_unique_ministry_campuses
     assert_equal([Factory(:ministrycampus_3), Factory(:ministrycampus_1), Factory(:ministrycampus_2)], Factory(:ministry_1).unique_ministry_campuses)
   end
+
+  def test_student_role_ids
+    assert_equal(StudentRole.all.collect(&:id), Ministry.find(1).student_role_ids)
+  end
+
+  def test_involved_student_role_ids
+    assert_equal(StudentRole.find_all_by_involved(true).collect(&:id), Ministry.find(1).involved_student_role_ids)
+  end
+
+  def test_involved_student_roles
+    assert_equal(StudentRole.find_all_by_involved(true), Ministry.find(1).involved_student_roles)
+  end
 end
