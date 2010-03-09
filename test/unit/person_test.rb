@@ -56,6 +56,13 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal(@josh, Person.find_exact(@josh, @josh.current_address))
     #email match
     assert_equal(@sue, Person.find_exact(@sue, @sue.current_address))
+
+    #test orphan user
+    u = User.new(:username => "orphan@user.com", :person_id => nil)
+    u.save
+    a = Address.new(:email => u.username)
+    a.save
+    assert_equal(u, Person.find_exact(Factory(:person_1), a).user)
   end
   
   def test_full_name
@@ -132,38 +139,92 @@ class PersonTest < ActiveSupport::TestCase
     Factory(:campusinvolvement_3)
     Factory(:ministry_1)
     wc = Factory(:person_1).working_campuses(Factory(:ministryinvolvement_1))
-    assert_equal(wc[0]["id"], Factory(:campus_3).id)
-    assert_equal(wc[1]["id"], Factory(:campus_1).id)
+    assert_equal(Factory(:campus_3).id, wc[0]["id"])
+    assert_equal(Factory(:campus_1).id, wc[1]["id"])
 
     Factory(:campusinvolvement_6)
     wc = Factory(:person_2).working_campuses(Factory(:ministryinvolvement_3))
-    assert_equal(wc[0]["id"], Factory(:campus_1).id)
+    assert_equal(Factory(:campus_1).id, wc[0]["id"])
   end
 
   test "add_or_update_campus different school year" do
     ci = Factory(:person_1).add_or_update_campus(Factory(:campusinvolvement_3).campus_id, Factory(:schoolyear_2).id, Factory(:campusinvolvement_3).ministry_id, Factory(:person_1).id)
-    assert_equal(ci.school_year, Factory(:schoolyear_2))
+    assert_equal(Factory(:schoolyear_2), ci.school_year)
   end
 
   test "admin?" do
-    assert_equal(Factory(:person_1).admin?(Factory(:ministry_1)), true)
+    assert_equal(true, Factory(:person_1).admin?(Factory(:ministry_1)))
   end
 
   test "campus list" do
     Factory(:campusinvolvement_6)
     c = Factory(:person_2).campus_list(Factory(:ministryinvolvement_3))
-    assert_equal(c[0].id, 1)
-    assert_equal(c.size, 1)
+    assert_equal(1, c[0].id)
+    assert_equal(1, c.size)
     
     c = Factory(:person_1).campus_list(Factory(:ministryinvolvement_1))
-    assert_equal(c[0].id, 2)
-    assert_equal(c[1].id, 3)
-    assert_equal(c[2].id, 1)
-    assert_equal(c.size, 3)
+    assert_equal(2, c[0].id)
+    assert_equal(3, c[1].id)
+    assert_equal(1, c[2].id)
+    assert_equal(3, c.size)
   end
 
   test "ministry_tree" do
-    puts Factory(:person_1).ministry_tree.inspect
+    mt = Factory(:person_1).ministry_tree
+    assert_equal(Factory(:ministry_1), mt.detect {|m| m.id == 1})
+    assert_equal(Factory(:ministry_2), mt.detect {|m| m.id == 2})
+    assert_equal(Factory(:ministry_3), mt.detect {|m| m.id == 3})
+    assert_equal(Factory(:ministry_7), mt.detect {|m| m.id == 6})
+    assert_equal(4, mt.size)
+  end
+
+  test "email=" do
+    # Factory(:person_1) has an address already
+    Factory(:person_1).email = "test@internets.ca"
+    a = Address.find(:first, :conditions => {:person_id => Factory(:person_1).id})
+    assert_equal("test@internets.ca", a.email)
+
+    # Factory(:person_2) doesn't have an address
+    Factory(:person_2).email = "test@internets.ca"
+    a = Address.find(:first, :conditions => {:person_id => Factory(:person_2).id})
+    assert_equal("test@internets.ca", a.email)
+  end
+
+  test "email" do
+    assert_equal('josh.starcher@uscm.org', Factory(:person_1).email)
+  end
+
+  test "sanify addresses" do
+    Factory(:person_1).sanify_addresses
+    assert_equal(nil, Factory(:person_1).current_address.state)
+  end
+
+  test "most nested ministry" do
+    assert_equal(Factory(:ministry_2), Factory(:person_1).most_nested_ministry)
+  end
+
+  test "to liquid" do
+    assert_equal({"preferred_name" => "Josh",
+        "himher" => "him",
+        "currentaddress" => CurrentAddress.find(Factory(:address_1).id),
+        "last_name" => "Starcher",
+        "hisher" => "his", "heshe" => "he",
+        "user" => Factory(:user_1), "first_name" => "Josh"},
+      Factory(:person_1).to_liquid)
+  end
+
+  test "most recent involvement" do
+    Factory(:campusinvolvement_2)
+    Factory(:campusinvolvement_4)
+
+    assert_equal(Factory(:campusinvolvement_4), Factory(:person_3).most_recent_involvement)
+
+    p = Person.new
+    p.first_name = "Mr"
+    p.last_name = "Man"
+    p.primary_campus_involvement_id = 2
+    p.save
+    assert_equal(2, Person.last.most_recent_involvement.id)
   end
 
 end

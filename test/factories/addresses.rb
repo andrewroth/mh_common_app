@@ -1,4 +1,4 @@
-Factory.define :address_1, :class => Address do |a|
+Factory.define :address_1, :class => Address, :singleton => true do |a|
   a.id '1'
   a.address_type 'current'
   a.person_id '50000'
@@ -12,14 +12,14 @@ Factory.define :address_1, :class => Address do |a|
   a.email 'josh.starcher@uscm.org'
 end
 
-Factory.define :address_2, :class => Address do |a|
+Factory.define :address_2, :class => Address, :singleton => true do |a|
   a.id '2'
   a.address_type 'emergency1'
   a.person_id '1'
   a.title 'Emergency'
 end
 
-Factory.define :address_3, :class => Address do |a|
+Factory.define :address_3, :class => Address, :singleton => true do |a|
   a.id '3'
   a.person_id '2000'
   a.address_type 'current'
