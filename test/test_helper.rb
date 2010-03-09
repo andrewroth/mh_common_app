@@ -178,6 +178,12 @@ class ActiveSupport::TestCase
     Factory(:groupinvolvement_6)
   end
 
+  def setup_ministry_campuses
+    Factory(:ministrycampus_1)
+    Factory(:ministrycampus_2)
+    Factory(:ministrycampus_3)
+  end
+
   protected
     def upload_file(options = {})
       use_temp_file options[:filename] do |file|
