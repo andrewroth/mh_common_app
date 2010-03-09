@@ -1,35 +1,18 @@
 require File.dirname(__FILE__) + '/../test_helper'
+require 'ruby-debug'
 
 class MinistryTest < ActiveSupport::TestCase
 
-  @data_loaded = false
-  def load_data
-    if !@data_loaded
-      @m = [nil, 
-            Factory(:ministry_1), 
-            Factory(:ministry_2), 
-            Factory(:ministry_3), 
-            Factory(:ministry_4), 
-            Factory(:ministry_5), 
-            Factory(:ministry_6), 
-            Factory(:ministry_7)]
-      Factory(:ministrycampus_1)
-      Factory(:ministrycampus_2)
-      Factory(:ministrycampus_3)
-      Factory(:campus_1)
-      Factory(:campus_2)
-      Factory(:campus_3)
-      @data_loaded = true
-    end
-
+  def setup
+    setup_ministries
+    setup_ministry_campuses
+    setup_campuses
     setup_ministry_roles
     setup_people
     setup_ministry_involvements
     setup_ministry_roles
-  end
-
-  def setup
-    load_data
+    setup_ministry_campuses
+    @m = Hash[*Ministry.all.collect{|m| [m.id, m]}.flatten]
   end
 
   def test_unique_campuses
@@ -80,5 +63,41 @@ class MinistryTest < ActiveSupport::TestCase
 
   def test_other_roles
     assert_equal Ministry.find(1).other_roles, OtherRole.find_all_by_ministry_id(1)
+  end
+
+  def test_destroy
+    mr1_id = Factory(:ministryrole_1)
+    mr2_id = Factory(:ministryrole_2)
+    m = Factory(:ministry_1)
+
+    m.destroy
+
+    assert_nil(Ministry.find(:first, :conditions => {:id => 1}))
+    assert_nil(MinistryRole.find(:first, :conditions => {:id => mr1_id}))
+    assert_nil(MinistryRole.find(:first, :conditions => {:id => mr2_id}))
+  end
+
+  def test_to_hash_with_children
+    h = Factory(:ministry_1).to_hash_with_children
+    
+    assert_equal(h["children"][0]["id"], 2)
+    assert_equal(h["children"][1]["id"], 6)
+    assert_equal(h["children"][0]["children"][0]["id"], 3)
+  end
+
+  def test_ancestors
+    assert_equal(Factory(:ministry_5).ancestors, [Factory(:ministry_5), Factory(:ministry_4)])
+  end
+
+  def test_ancestor_ids
+    assert_equal(Factory(:ministry_5).ancestor_ids, [Factory(:ministry_5).id, Factory(:ministry_4).id])
+  end
+
+  def test_subministry_campuses
+    assert_equal([Factory(:ministrycampus_2)], Factory(:ministry_1).subministry_campuses)
+  end
+
+  def test_unique_ministry_campuses
+    assert_equal([Factory(:ministrycampus_3), Factory(:ministrycampus_1), Factory(:ministrycampus_2)], Factory(:ministry_1).unique_ministry_campuses)
   end
 end

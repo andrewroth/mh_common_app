@@ -11,6 +11,9 @@ class PersonTest < ActiveSupport::TestCase
     setup_addresses
     setup_campuses
     setup_ministries
+    Factory(:ministrycampus_1)
+    Factory(:ministrycampus_2)
+    Factory(:ministrycampus_3)
     setup_school_years
     setup_ministry_roles
     setup_users
@@ -124,4 +127,43 @@ class PersonTest < ActiveSupport::TestCase
       @person.add_or_update_ministry mi.ministry, MinistryRole.find(2)
     end
   end
+
+  test "working campuses" do
+    Factory(:campusinvolvement_3)
+    Factory(:ministry_1)
+    wc = Factory(:person_1).working_campuses(Factory(:ministryinvolvement_1))
+    assert_equal(wc[0]["id"], Factory(:campus_3).id)
+    assert_equal(wc[1]["id"], Factory(:campus_1).id)
+
+    Factory(:campusinvolvement_6)
+    wc = Factory(:person_2).working_campuses(Factory(:ministryinvolvement_3))
+    assert_equal(wc[0]["id"], Factory(:campus_1).id)
+  end
+
+  test "add_or_update_campus different school year" do
+    ci = Factory(:person_1).add_or_update_campus(Factory(:campusinvolvement_3).campus_id, Factory(:schoolyear_2).id, Factory(:campusinvolvement_3).ministry_id, Factory(:person_1).id)
+    assert_equal(ci.school_year, Factory(:schoolyear_2))
+  end
+
+  test "admin?" do
+    assert_equal(Factory(:person_1).admin?(Factory(:ministry_1)), true)
+  end
+
+  test "campus list" do
+    Factory(:campusinvolvement_6)
+    c = Factory(:person_2).campus_list(Factory(:ministryinvolvement_3))
+    assert_equal(c[0].id, 1)
+    assert_equal(c.size, 1)
+    
+    c = Factory(:person_1).campus_list(Factory(:ministryinvolvement_1))
+    assert_equal(c[0].id, 2)
+    assert_equal(c[1].id, 3)
+    assert_equal(c[2].id, 1)
+    assert_equal(c.size, 3)
+  end
+
+  test "ministry_tree" do
+    puts Factory(:person_1).ministry_tree.inspect
+  end
+
 end
