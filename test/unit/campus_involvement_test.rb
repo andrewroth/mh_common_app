@@ -24,4 +24,14 @@ class CampusInvolvementTest < ActiveSupport::TestCase
     assert_equal(mi.ministry_role_id, 7)
   end
 
+  def test_validate
+    Factory(:campusinvolvement_2)
+    Factory(:campus_1)
+    Factory(:person_3)
+    Factory(:schoolyear_1)
+    ci = CampusInvolvement.new(:person_id => 2000, :campus_id => 1, :end_date => nil, :ministry_id => 1, :school_year_id => 1)
+    ci.validate
+    assert_equal("There is already a campus involvement for the campus \"University of California-Davis\"; you can only be involved once per campus.  Archive the existing involvement and try again.", ci.errors["base"])
+  end
+
 end

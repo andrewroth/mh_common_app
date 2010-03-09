@@ -12,5 +12,9 @@ class CampusTest < ActiveSupport::TestCase
     campus2 = Factory(:campus_2)
     assert campus1 <=> campus2
   end
+
+  def test_to_liquid
+    assert_equal({"name" => "University of California-Davis"}, Factory(:campus_1).to_liquid)
+  end
 end
 
