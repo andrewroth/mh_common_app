@@ -42,4 +42,8 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(0, u.errors.size)
     assert_not_nil u.created_at
   end
+
+  def test_to_liquid
+    assert_equal(Date.today, Date.strptime(Factory(:user_1).to_liquid["created_at"].to_s))
+  end
 end
