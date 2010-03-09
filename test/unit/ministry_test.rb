@@ -52,5 +52,37 @@ class MinistryTest < ActiveSupport::TestCase
   def test_self_plus_descendants
     assert_equal([@m[2], @m[3]], @m[2].self_plus_descendants)
   end
-  
+
+  def test_destroy
+    mr1_id = Factory(:ministryrole_1)
+    mr2_id = Factory(:ministryrole_2)
+    m = Factory(:ministry_1)
+
+    m.destroy
+
+    assert_nil(Ministry.find(:first, :conditions => {:id => 1}))
+    assert_nil(MinistryRole.find(:first, :conditions => {:id => mr1_id}))
+    assert_nil(MinistryRole.find(:first, :conditions => {:id => mr2_id}))
+  end
+
+  def test_to_hash_with_children
+    h = Factory(:ministry_1).to_hash_with_children
+    
+    assert_equal(h["children"][0]["id"], 2)
+    assert_equal(h["children"][1]["id"], 6)
+    assert_equal(h["children"][0]["children"][0]["id"], 3)
+  end
+
+  def test_ancestors
+    assert_equal(Factory(:ministry_5).ancestors, [Factory(:ministry_5), Factory(:ministry_4)])
+  end
+
+  def test_ancestor_ids
+    assert_equal(Factory(:ministry_5).ancestor_ids, [Factory(:ministry_5).id, Factory(:ministry_4).id])
+  end
+
+  def test_subministry_campuses
+    assert_equal(Factory(:ministry_1).subministry_campuses, [Factory(:ministrycampus_2)])
+  end
+
 end

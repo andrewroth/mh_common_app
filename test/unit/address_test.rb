@@ -19,4 +19,11 @@ class AddressTest < ActiveSupport::TestCase
     assert_equal('emergency1', EmergencyAddress.create(:person_id => '50000', :email => 'example@example.com').address_type)
     assert_equal('permanent', PermanentAddress.create(:person_id => '50000', :email => 'example@example.com').address_type)
   end
+
+  def test_sanify
+    a = Factory(:address_1)
+    a.sanify
+    assert_equal(a.state, nil)
+  end
+  
 end
