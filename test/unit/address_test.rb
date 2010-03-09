@@ -25,5 +25,26 @@ class AddressTest < ActiveSupport::TestCase
     a.sanify
     assert_equal(a.state, nil)
   end
-  
+
+  def test_to_liquid
+    assert_equal({"email" => 'josh.starcher@uscm.org', "phone" => '847-980-1420'}, Factory(:address_1).to_liquid)
+  end
+
+  def test_start_date=
+    a = Factory(:address_1)
+    a.start_date = Date.today
+    assert_equal(Date.today, a.start_date)
+
+    a.start_date = "05/05/1995"
+    assert_equal(Date.strptime("05/05/1995", (I18n.t 'date.formats.default')), a.start_date)
+  end
+
+  def test_end_date=
+    a = Factory(:address_1)
+    a.end_date = Date.today
+    assert_equal(Date.today, a.end_date)
+
+    a.end_date = "05/05/1995"
+    assert_equal(Date.strptime("05/05/1995", (I18n.t 'date.formats.default')), a.end_date)
+  end
 end
