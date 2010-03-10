@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../test_helper'
+require 'mocha'
 
 class PersonTest < ActiveSupport::TestCase
 #  Person, CustomValue, TrainingAnswer, 
@@ -227,4 +228,53 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal(2, Person.last.most_recent_involvement.id)
   end
 
+  test "import gcx profile" do
+    attrib = [{"value" => "test_email", "displayname" => "emailAddress"},
+              {"value" => "test_city", "displayname" => "city"},
+              {"value" => "test_phone", "displayname" => "landPhone"},
+              {"value" => "test_alternate_phone", "displayname" => "mobilePhone"},
+              {"value" => "test_zip", "displayname" => "zip"},
+              {"value" => "test_address1", "displayname" => "location"},
+              {"value" => "test_first_name", "displayname" => "firstName"},
+              {"value" => "test_last_name", "displayname" => "lastName"},
+              {"value" => "test_birth_date", "displayname" => "birthdate"},
+              {"value" => "test_gender", "displayname" => "gender"}]
+
+    CASClient::Frameworks::Rails::Filter.stubs(:client).returns(CASClient.new)
+    CASClient.any_instance.stubs(:request_proxy_ticket).returns(ProxyTicket.new)
+    ProxyTicket.any_instance.stubs(:ticket).returns("proxy_ticket")
+    Factory(:person_1).stubs(:Hpricot).returns(Hpricot.new)
+    Hpricot.any_instance.stubs(:/).returns(attrib)
+
+    assert_equal(true, Factory(:person_1).import_gcx_profile(GcxTicket.new))
+
+    a = ::Person.find(50000).current_address
+
+    assert_equal("test_email", a.email)
+    assert_equal("test_city", a.city)
+    assert_equal("test_phone", a.phone)
+    assert_equal("test_alternate_phone", a.alternate_phone)
+    assert_equal("test_zip", a.zip)
+    assert_equal("test_address1", a.address1)
+  end
+
+end
+
+class GcxTicket ; end
+class CASClient
+  def request_proxy_ticket(proxy_granting_ticket, service_uri) ; end
+end
+class CASClient::Frameworks ; end
+class CASClient::Frameworks::Rails ; end
+class CASClient::Frameworks::Rails::Filter
+  def self.client ; end
+end
+class CASClient::ServiceTicket
+  def initialize(proxy_ticket = nil, service_uri = nil) ; end
+end
+class ProxyTicket
+  def ticket ; end
+end
+class Hpricot
+  def /(val) ; end
 end
