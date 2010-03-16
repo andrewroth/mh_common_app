@@ -1,4 +1,4 @@
 class Region < ActiveRecord::Base
-  include Legacy::Hrdb::Region
   load_mappings
+  include Legacy::Hrdb::Region
 end

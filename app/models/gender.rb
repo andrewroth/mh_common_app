@@ -1,4 +1,4 @@
 class Gender < ActiveRecord::Base
-  include Legacy::Hrdb::Gender
   load_mappings
+  include Legacy::Hrdb::Gender
 end

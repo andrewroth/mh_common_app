@@ -1,4 +1,4 @@
 class AccountadminAccesscategory < ActiveRecord::Base
-  include Legacy::Accountadmin::AccountadminAccesscategory
   load_mappings
+  include Legacy::Accountadmin::AccountadminAccesscategory
 end

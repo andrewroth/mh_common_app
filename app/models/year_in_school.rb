@@ -1,4 +1,4 @@
 class YearInSchool < ActiveRecord::Base
-  include Legacy::Hrdb::YearInSchool
   load_mappings
+  include Legacy::Hrdb::YearInSchool
 end

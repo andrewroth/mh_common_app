@@ -1,4 +1,4 @@
 class AccountadminLanguage < ActiveRecord::Base
-  include Legacy::Accountadmin::AccountadminLanguage
   load_mappings
+  include Legacy::Accountadmin::AccountadminLanguage
 end

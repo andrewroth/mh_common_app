@@ -1,4 +1,4 @@
 class CimHrdbPersonYear < ActiveRecord::Base
-  include Legacy::Hrdb::CimHrdbPersonYear
   load_mappings
+  include Legacy::Hrdb::CimHrdbPersonYear
 end

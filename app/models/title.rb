@@ -1,4 +1,4 @@
 class Title < ActiveRecord::Base
-  include Legacy::Hrdb::Title
   load_mappings
+  include Legacy::Hrdb::Title
 end

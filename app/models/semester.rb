@@ -1,4 +1,4 @@
 class Semester < ActiveRecord::Base
-  include Legacy::Stats::Semester
   load_mappings
+  include Legacy::Stats::Semester
 end

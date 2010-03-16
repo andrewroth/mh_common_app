@@ -1,4 +1,4 @@
 class Week < ActiveRecord::Base
-  include Legacy::Stats::Week
   load_mappings
+  include Legacy::Stats::Week
 end

@@ -1,4 +1,4 @@
 class CimHrdbPermanentAddress < ActiveRecord::Base
-  include Legacy::Hrdb::CimHrdbPermanentAddress
   load_mappings
+  include Legacy::Hrdb::CimHrdbPermanentAddress
 end

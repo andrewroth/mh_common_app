@@ -1,4 +1,4 @@
 class CimHrdbPriv < ActiveRecord::Base
-  include Legacy::Hrdb::CimHrdbPriv
   load_mappings
+  include Legacy::Hrdb::CimHrdbPriv
 end

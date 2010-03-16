@@ -1,4 +1,4 @@
 class View < ActiveRecord::Base
-  include Pulse::Ca::View
   load_mappings
+  include Pulse::Ca::View
 end

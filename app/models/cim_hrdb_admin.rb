@@ -1,4 +1,4 @@
 class CimHrdbAdmin < ActiveRecord::Base
-  include Legacy::Hrdb::CimHrdbAdmin
   load_mappings
+  include Legacy::Hrdb::CimHrdbAdmin
 end

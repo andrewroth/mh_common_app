@@ -1,5 +1,5 @@
 class Campus < ActiveRecord::Base
-  include Common::Core::Campus
-  include Common::Core::Campus::Ca::Campus
   load_mappings
+  include Common::Core::Campus
+  include Common::Core::Ca::Campus
 end

@@ -1,4 +1,4 @@
 class Assignment < ActiveRecord::Base
-  include Legacy::Hrdb::Assignment
   load_mappings
+  include Legacy::Hrdb::Assignment
 end

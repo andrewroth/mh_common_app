@@ -1,4 +1,4 @@
 class CampusInvolvement < ActiveRecord::Base
-  include Common::Core::CampusInvolvement
   load_mappings
+  include Common::Core::CampusInvolvement
 end

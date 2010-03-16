@@ -1,4 +1,4 @@
 class CimHrdbCurrentAddress < ActiveRecord::Base
-  include Legacy::Hrdb::CimHrdbCurrentAddress
   load_mappings
+  include Legacy::Hrdb::CimHrdbCurrentAddress
 end
