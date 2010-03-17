@@ -226,13 +226,6 @@ class PersonTest < ActiveSupport::TestCase
     Factory(:campusinvolvement_4)
 
     assert_equal(Factory(:campusinvolvement_4), Factory(:person_3).most_recent_involvement)
-
-    p = Person.new
-    p.first_name = "Mr"
-    p.last_name = "Man"
-    p.primary_campus_involvement_id = 2
-    p.save
-    assert_equal(2, Person.last.most_recent_involvement.id)
   end
 
   test "import gcx profile" do
