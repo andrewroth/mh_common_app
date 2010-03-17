@@ -7,10 +7,10 @@ class UserTest < ActiveSupport::TestCase
     @user = Factory(:user_1)
   end
 
-  def test_authenticate
-    u = User.authenticate('josh.starcher@example.com', 'test')
-    assert u.is_a?(User)
-  end
+#  def test_authenticate
+#    u = User.authenticate('josh.starcher@example.com', 'test')
+#    assert u.is_a?(User)
+#  end
   
   def test_new_password_validation
     @user.update_attributes(:plain_password => 'blahbas')
@@ -38,6 +38,17 @@ class UserTest < ActiveSupport::TestCase
     test_user_token_nil
   end
   
+#  def test_set_remember_me
+#    @user.remember_me
+#    assert @user.remember_token?
+#  end
+#
+#  def test_forget_me
+#    test_set_remember_me
+#    @user.forget_me
+#    test_user_token_nil
+#  end
+
   def test_find_or_create_from_cas
     atts = {"ssoGuid" => "test_ssoGuid", "firstName" => "test_firstName", "lastName" => "test_lastName"}
     CasReceipt.any_instance.stubs(:extra_attributes).returns(atts)
