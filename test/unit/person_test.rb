@@ -146,12 +146,12 @@ class PersonTest < ActiveSupport::TestCase
     Factory(:campusinvolvement_3)
     Factory(:ministry_1)
     wc = Factory(:person_1).working_campuses(Factory(:ministryinvolvement_1))
-    assert_equal(Factory(:campus_3).id, wc[0]["id"])
-    assert_equal(Factory(:campus_1).id, wc[1]["id"])
+    assert_equal(Factory(:campus_3).id, wc[0]["campus_id"])
+    assert_equal(Factory(:campus_1).id, wc[1]["campus_id"])
 
     Factory(:campusinvolvement_6)
     wc = Factory(:person_2).working_campuses(Factory(:ministryinvolvement_3))
-    assert_equal(Factory(:campus_1).id, wc[0]["id"])
+    assert_equal(Factory(:campus_1).id, wc[0]["campus_id"])
   end
 
   test "add_or_update_campus different school year" do
