@@ -64,7 +64,8 @@ class PersonTest < ActiveSupport::TestCase
 
   def test_find_exact_from_orphan_user
     #test orphan user
-    u = User.new(:username => "orphan@user.com", :person_id => nil)
+    u = User.new(:username => "orphan@user.com", :person_id => nil, :guid => "", 
+                 :last_login => 10.days.ago)
     u.save
     a = Address.new(:email => u.username)
     a.save
