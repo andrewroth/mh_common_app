@@ -38,16 +38,6 @@ class UserTest < ActiveSupport::TestCase
     test_user_token_nil
   end
   
-  def test_stamp_created_on
-    u = User.create(:username => 'frank@uscm.org')
-    assert_equal(0, u.errors.size)
-    assert_not_nil u.created_at
-  end
-
-  def test_to_liquid
-    assert_equal(Date.today, Date.strptime(Factory(:user_1).to_liquid["created_at"].to_s))
-  end
-
   def test_find_or_create_from_cas
     atts = {"ssoGuid" => "test_ssoGuid", "firstName" => "test_firstName", "lastName" => "test_lastName"}
     CasReceipt.any_instance.stubs(:extra_attributes).returns(atts)
@@ -66,7 +56,9 @@ class UserTest < ActiveSupport::TestCase
 
 
     # test user already exists with guid
-    User.new(:username => "test_username_2", :guid => "test_guid_2").save
+    p = Person.new(:first_name => "test_firstname", :last_name => "test_lastname")
+    p.save
+    p.create_user_and_access_only("test_guid_2", "test_username_2")
     atts["ssoGuid"] = "test_guid_2"
     
     cast = CasTicket.new
@@ -81,7 +73,7 @@ class UserTest < ActiveSupport::TestCase
 
 
     # test user already exists but without guid
-    User.new(:username => "test_username_3", :guid => "").save
+    User.new(:username => "test_username_3", :guid => "", :last_login => Date.today).save
     atts["ssoGuid"] = "test_guid_3"
 
     cast = CasTicket.new
