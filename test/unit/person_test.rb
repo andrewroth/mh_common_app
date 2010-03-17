@@ -54,8 +54,10 @@ class PersonTest < ActiveSupport::TestCase
   
   def test_find_exact
     #username match
+    puts @josh.current_address.email
     assert_equal(@josh, Person.find_exact(@josh, @josh.current_address))
     #email match
+    puts @sue.current_address.email
     assert_equal(@sue, Person.find_exact(@sue, @sue.current_address))
 
     #test orphan user
@@ -182,12 +184,12 @@ class PersonTest < ActiveSupport::TestCase
   test "email=" do
     # Factory(:person_1) has an address already
     Factory(:person_1).email = "test@internets.ca"
-    a = Address.find(:first, :conditions => {:person_id => Factory(:person_1).id})
+    a = CimHrdbCurrentAddress.find(:first, :conditions => {:person_id => Factory(:person_1).id})
     assert_equal("test@internets.ca", a.email)
 
     # Factory(:person_2) doesn't have an address
     Factory(:person_2).email = "test@internets.ca"
-    a = Address.find(:first, :conditions => {:person_id => Factory(:person_2).id})
+    a = CimHrdbCurrentAddress.find(:first, :conditions => {:person_id => Factory(:person_2).id})
     assert_equal("test@internets.ca", a.email)
   end
 

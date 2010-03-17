@@ -44,12 +44,25 @@ class ActiveSupport::TestCase
     RAILS_DEFAULT_LOGGER
   end
 
+  def teardown
+    teardown_everything
+  end
+
   # Add more helper methods to be used by all tests here...
   def login(username = 'josh.starcher@example.com')
-    @user = User.find(:first, :conditions => {:username => username})
+    @user = User.find(:first, :conditions => { User._(:username) => username})
     @request.session[:user] = @user.id
     @request.session[:ministry_id] = 1
     @person = @user.person
+  end
+
+  def reset_all_sequences
+    Factory.sequences.values.each { |s| s.reset }
+  end
+
+  def teardown_everything
+    reset_all_sequences
+    ActiveRecord::Base.send(:subclasses).each { |m| m.delete_all unless m.abstract_class || m == DbFile }
   end
 
   def setup_users
@@ -103,6 +116,7 @@ class ActiveSupport::TestCase
   def setup_default_user
     Factory(:user_1)
     Factory(:person_1)
+    Factory(:access_1)
     Factory(:campusinvolvement_3)
     Factory(:ministry_1)
     Factory(:ministry_2)
