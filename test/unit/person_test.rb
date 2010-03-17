@@ -54,13 +54,11 @@ class PersonTest < ActiveSupport::TestCase
   
   def test_find_exact_from_username
     #username match
-    puts @josh.current_address.email
     assert_equal(@josh, Person.find_exact(@josh, @josh.current_address))
   end
 
   def test_find_exact_from_email
     #email match
-    puts @sue.current_address.email
     assert_equal(@sue, Person.find_exact(@sue, @sue.current_address))
   end
 
