@@ -52,12 +52,17 @@ class PersonTest < ActiveSupport::TestCase
     assert_not_nil p.emergency_address
   end
   
-  def test_find_exact
+  def test_find_exact_from_username
     #username match
     assert_equal(@josh, Person.find_exact(@josh, @josh.current_address))
+  end
+
+  def test_find_exact_from_email
     #email match
     assert_equal(@sue, Person.find_exact(@sue, @sue.current_address))
+  end
 
+  def test_find_exact_from_orphan_user
     #test orphan user
     u = User.new(:username => "orphan@user.com", :person_id => nil)
     u.save
