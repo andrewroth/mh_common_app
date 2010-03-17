@@ -211,9 +211,10 @@ class PersonTest < ActiveSupport::TestCase
   end
 
   test "to liquid" do
+    Factory(:access_1)
     assert_equal({"preferred_name" => "Josh",
         "himher" => "him",
-        "currentaddress" => CurrentAddress.find(Factory(:address_1).id),
+        "currentaddress" => CimHrdbCurrentAddress.find(Factory(:person_1).id),
         "last_name" => "Starcher",
         "hisher" => "his", "heshe" => "he",
         "user" => Factory(:user_1), "first_name" => "Josh"},
