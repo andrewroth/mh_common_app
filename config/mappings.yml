@@ -5,7 +5,7 @@
 lib_path: vendor/plugins/movement_tracker_canada/app/models
 
 databases:
-  <%= "ciministry_#{RAILS_ENV}" %>: user, person, access, campus, school_year, year_in_school, campus, assignment, assignmentstatus, cim_hrdb_current_address, cim_hrdb_permanent_address, country, title, emerg, gender, region, state, cim_hrdb_admin, cim_hrdb_priv, cim_hrdb_staff, cim_hrdb_person_year, accountadmin_accessgroup, accountadmin_accountadminaccess, accountadmin_accesscategory, accountadmin_accountgroup, accountadmin_language, accountadmin_vieweraccessgroup, site_multilingual_label, month, prc, prcmethod, semester, week, weeklyreport, year
+  <%= "ciministry_#{RAILS_ENV}" %>: user, person, access, campus, school_year, year_in_school, campus, assignment, assignmentstatus, cim_hrdb_current_address, cim_hrdb_permanent_address, country, title, emerg, gender, region, state, cim_hrdb_admin, cim_hrdb_priv, cim_hrdb_staff, cim_hrdb_person_year, accountadmin_accessgroup, accountadmin_accountadminaccess, accountadmin_accesscategory, accountadmin_accountgroup, accountadmin_language, accountadmin_vieweraccessgroup, site_multilingual_label, month, prc, prcmethod, semester, week, weeklyreport, year, campus_access, cash_transaction, data_type, event, event_admin, field, field_type, field_value, price_rule, price_rule_type, registration, registration_status, scholarship, super_admin
 
 tables:
   user: accountadmin_viewer
@@ -42,6 +42,20 @@ tables:
   week: cim_stats_week
   weeklyreport: cim_stats_weeklyreport
   year: cim_stats_year
+  price_rule_type: cim_reg_priceruletypes
+  campus_access: cim_reg_campusaccess
+  cash_transaction: cim_reg_cashtransaction
+  data_type: cim_reg_datatypes
+  event: cim_reg_event
+  event_admin: cim_reg_eventadmin
+  field: cim_reg_fields
+  field_type: cim_reg_fieldtypes
+  field_value: cim_reg_fieldvalues
+  price_rule: cim_reg_pricerules
+  registration: cim_reg_registration
+  registration_status: cim_reg_status
+  scholarship: cim_reg_scholarship
+  super_admin: cim_reg_superadmin
 
 
 
@@ -57,9 +71,11 @@ year_in_school:
   desc: year_desc
 assignment:
   id: assignment_id
+  status_id: assignmentstatus_id
 assignmentstatus:
   id: assignmentstatus_id
   desc: assignmentstatus_desc
+  description: assignmentstatus_desc
 country:
   id: country_id
   name: country_desc
@@ -69,11 +85,14 @@ country:
   short_desc: country_shortDesc
   iso_code: country_shortDesc
   code: country_shortDesc
+  description: country_desc
+  short_description: country_shortDesc
 emerg:
   id: emerg_id
 gender:
   id: gender_id
   desc: gender_desc
+  description: gender_desc
 region:
   id: region_id
   desc: reg_desc
@@ -82,10 +101,13 @@ state:
   name: province_desc
   abbreviation: province_shortDesc
   abbrev: province_shortDesc
+  description: province_desc
+  short_description: province_shortDesc
   
 # Column Mappings
 user:
   id: viewer_id
+  user_id: viewer_userID
   last_login: viewer_lastLogin
   username: viewer_userID
   password: viewer_passWord
@@ -103,6 +125,8 @@ person:
   city: person_local_city
   zip: person_local_pc
   email: person_email
+  phone: person_phone
+  address: person_addr
 
 campus:
   id: campus_id
@@ -111,6 +135,13 @@ campus:
   state_id: province_id
   desc: campus_desc
   short_desc: campus_shortDesc
+  description: campus_desc
+  short_description: campus_shortDesc
+  account_group_id: accountgroup_id
+  region_id: region_id
+  website: campus_website
+  facebook_group: campus_facebookgroup
+  gcx_namespace: campus_gcxnamespace
   
 cim_hrdb_current_address:
   id: person_id
@@ -224,3 +255,102 @@ weeklyreport:
 week:
   id: week_id
   end_date: week_endDate
+
+
+cash_transaction:
+  id: cashtransaction_id
+  registration_id: reg_id
+  staff_name: cashtransaction_staffName
+  received: cashtransaction_recd
+  amount_paid: cashtransaction_amtPaid
+  updated_at: cashtransaction_moddate
+
+
+data_type:
+  id: datatypes_id
+  key: datatypes_key
+  description: datatypes_desc
+
+
+event:
+  id: event_id
+  name: event_name
+  desc_brief: event_descBrief
+  desc_detail: event_descDetail
+  start: event_startDate
+  end: event_endDate
+  reg_start: event_regStart
+  reg_end: event_regEnd
+  website: event_website
+  email_text: event_emailConfirmText
+  price: event_basePrice
+  deposit: event_deposit
+  email: event_contactEmail
+  price_text: event_pricingText
+  on_home_page: event_onHomePage
+  allow_cash: event_allowCash
+
+
+event_admin:
+  id: eventadmin_id
+
+
+field:
+  id: fields_id
+  type_id: fieldtype_id
+  description: fields_desc
+  priority: fields_priority
+  required: fields_reqd
+  invalid: fields_invalid
+  hidden: fields_hidden
+  data_type_id: datatypes_id
+
+
+field_type:
+  id: fieldtypes_id
+  description: fieldtypes_desc
+
+
+field_value:
+  id: fieldvalues_id
+  field_id: fields_id
+  value: fieldvalues_value
+  updated_at: fieldvalues_modTime
+
+
+price_rule:
+  id: pricerules_id
+  type_id: priceruletypes_id
+  description: pricerules_desc
+  field_id: fields_id
+  value: pricerules_value
+  discount: pricerules_discount
+
+
+price_rule_type:
+  id: priceruletypes_id
+  description: priceruletypes_desc
+
+
+registration:
+  id: registration_id
+  date: registration_date
+  confirm_num: registration_confirmNum
+  status_id: registration_status
+  balance: registration_balance
+
+
+registration_status:
+  id: status_id
+  description: status_desc
+
+
+scholarship:
+  id: scholarship_id
+  amount: scholarship_amount
+  source_account: scholarship_sourceAcct
+  source_description: scholarship_sourceDesc
+
+
+super_admin:
+  id: superadmin_id
