@@ -89,7 +89,20 @@ class ActiveSupport::TestCase
   def setup_generic_person
     return Factory(:person)
   end
-  
+
+  def setup_assignments
+    Factory(:person_1)
+    Factory(:person_2)
+    Factory(:person_3)
+    Factory(:person)
+    Factory(:assignment_1)
+    Factory(:assignment_2)
+    Factory(:assignment_3)
+    Factory(:assignment_4)
+    Factory(:assignment_5)
+    Factory(:assignment_6)
+  end
+
   def setup_people
     reset_people_sequences
     Factory(:person_1)

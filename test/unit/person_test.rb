@@ -232,6 +232,11 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal(Factory(:campusinvolvement_4), Factory(:person_3).most_recent_involvement)
   end
 
+  test "get best assigned campus" do
+    setup_assignments
+    assert_equal(Factory(:person_1).get_best_assigned_campus, Factory(:campus_3))
+  end
+
   test "import gcx profile" do
     attrib = [{"value" => "test_email", "displayname" => "emailAddress"},
               {"value" => "test_city", "displayname" => "city"},
