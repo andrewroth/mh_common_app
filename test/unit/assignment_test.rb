@@ -18,6 +18,6 @@ class AssignmentTest < ActiveSupport::TestCase
   end
 
   def test_find_staff_on_campus
-    assert_equal Assignment.find_staff_on_campus(Campus.first), [ Assignment.find(1) ]
+    assert_equal [ Assignment.find(1) ], Assignment.find_staff_on_campus(Campus.first)
   end
 end
