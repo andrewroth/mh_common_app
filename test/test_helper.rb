@@ -4,5 +4,6 @@ require 'test_help'
 
 
 class ActiveSupport::TestCase
+  include ActionController::TestProcess
   include Test::TestHelper
 end
