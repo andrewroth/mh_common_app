@@ -44,6 +44,7 @@ namespace :db do
         ActiveRecord::Base.connection.execute "ALTER TABLE `cim_hrdb_assignment` DROP FOREIGN KEY `FK_assign_campus`;"
         ActiveRecord::Base.connection.execute "ALTER TABLE `cim_hrdb_person_year` DROP FOREIGN KEY `FK_year_person`;"
         ActiveRecord::Base.connection.execute "ALTER TABLE `cim_hrdb_person_year` DROP FOREIGN KEY `1`;"
+        ActiveRecord::Base.connection.execute "ALTER TABLE `cim_hrdb_region` DROP FOREIGN KEY `FK_region_country`;"
 
       end
     end
