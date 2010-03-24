@@ -60,21 +60,20 @@ class PersonTest < ActiveSupport::TestCase
     assert_raise(ActiveRecord::RecordNotFound) {::CimHrdbPersonYear.find(yid2)}
   end
 
-#  this test doesn't work yet, mc.try(:ministry) is returning nil
-#  def test_map_cim_hrdb_to_mt
-#    CampusInvolvement.delete_all
-#    MinistryInvolvement.delete_all
-#
-#    p = Factory(:person_1)
-#    setup_assignmentstatuses
-#    Factory(:assignment_1)
-#    Factory(:cimhrdbstaff_1)
-#    Factory(:ministrycampus_1)
-#    Factory(:ministry_1)
-#
-#    p.map_cim_hrdb_to_mt
-#  end
+  def test_map_cim_hrdb_to_mt
+    flunk("this test doesn't work yet, mc.try(:ministry) is returning nil")
+    CampusInvolvement.delete_all
+    MinistryInvolvement.delete_all
 
+    p = Factory(:person_1)
+    setup_assignmentstatuses
+    Factory(:assignment_1)
+    Factory(:cimhrdbstaff_1)
+    Factory(:ministrycampus_1)
+    Factory(:ministry_1)
+
+    p.map_cim_hrdb_to_mt
+  end
 
   def test_get_highest_assignment
     p = Factory(:person_1)
@@ -91,22 +90,112 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal(Factory(:assignment_6), p.get_highest_assignment)
   end
 
-#  this test doesn't work yet, mi isn't being saved in second upgrade_ministry_involvement call
-#
-#  def test_upgrade_ministry_involvement
-#    p = Factory(:person_111)
-#
-#    assert_equal([], p.ministry_involvements)
-#
-#    p.upgrade_ministry_involvement(Factory(:ministry_1), Factory(:ministryrole_6))
-#    assert_equal(::StudentRole, p.ministry_involvements.first.ministry_role.class)
-#
-#    p.upgrade_ministry_involvement(Factory(:ministry_1), Factory(:ministryrole_9))
-#    assert_equal(::StaffRole, p.ministry_involvements.first.ministry_role.class)
-#    assert_equal(1, p.ministry_involvements.size)
-#
-#  end
-  
+  def test_upgrade_ministry_involvement
+    flunk("this test doesn't work yet, mi isn't being saved in second upgrade_ministry_involvement call")
+    p = Factory(:person_111)
+
+    assert_equal([], p.ministry_involvements)
+
+    p.upgrade_ministry_involvement(Factory(:ministry_1), Factory(:ministryrole_6))
+    assert_equal(::StudentRole, p.ministry_involvements.first.ministry_role.class)
+
+    p.upgrade_ministry_involvement(Factory(:ministry_1), Factory(:ministryrole_9))
+    assert_equal(::StaffRole, p.ministry_involvements.first.ministry_role.class)
+    assert_equal(1, p.ministry_involvements.size)
+  end
+
+  def test_map_cim_hrdb_to_mt_old
+    MinistryInvolvement.delete_all
+    CampusInvolvement.delete_all
+    setup_assignments
+    setup_assignmentstatuses
+    setup_ministry_campuses
+    Factory(:user_1)
+    Factory(:access_1)
+    Factory(:cimhrdbpersonyear_1)
+    Factory(:cimhrdbstaff_1)
+    p = Factory(:person_1)
+
+    p.map_cim_hrdb_to_mt_old
+
+    assert_equal(Factory(:ministry_1).id, p.ministry_involvements.first.ministry_id)
+    assert_equal("Staff Team", p.ministry_involvements.first.ministry_role.name)
+
+    assert_equal(Factory(:ministry_6).id, p.ministry_involvements.last.ministry_id)
+    assert_equal("Staff", p.ministry_involvements.last.ministry_role.name)
+
+    assert_equal(Factory(:campus_1).id, p.campus_involvements.first.campus_id)
+    assert_equal(Factory(:ministry_6).id, p.campus_involvements.first.ministry_id)
+    assert_equal(Factory(:schoolyear_10).name, p.campus_involvements.first.school_year.name)
+  end
+
+  def test_map_cim_hrdb_to_mt_old_not_staff
+    MinistryInvolvement.delete_all
+    CampusInvolvement.delete_all
+    setup_assignments
+    setup_assignmentstatuses
+    setup_ministry_campuses
+    Factory(:user_1)
+    Factory(:access_1)
+    Factory(:cimhrdbpersonyear_1)
+    p = Factory(:person_1)
+
+    p.map_cim_hrdb_to_mt_old
+
+    assert_equal([], p.ministry_involvements)
+
+    assert_equal(Factory(:campus_1).id, p.campus_involvements.first.campus_id)
+    assert_equal(Factory(:ministry_6).id, p.campus_involvements.first.ministry_id)
+    assert_equal(Factory(:schoolyear_3).name, p.campus_involvements.first.school_year.name)
+  end
+
+  def test_find_user
+    p = Factory(:person_1)
+    a = Factory(:address_1)
+    u = Factory(:user_1)
+    u.username = p.email
+    u.save
+
+    # test no access
+    p = ::Person.find_user(p, a)
+    assert_equal(u, p.user)
+
+    # test has access
+    p = ::Person.find_user(p, a)
+    assert_equal(u, p.user)
+  end
+
+  def test_find_user_no_user
+    p = Factory(:person_1)
+    a = Factory(:address_1)
+
+    p = ::Person.find_user(p, a)
+    assert_equal(p.user.user_id, p.email)
+  end
+
+  def test_search
+    assert_equal([Factory(:person_1)], ::Person.search("Josh", 1, 10))
+    assert_equal([::Person.find(2)], ::Person.search("A2", 1, 10))
+    assert_equal(::Person.all(:conditions => "person_id IN (1, 2, 3, 111, 50000)"), ::Person.search("A", 1, 10))
+    assert_equal(nil, ::Person.search(nil, 1, 1))
+  end
+
+  def test_is_student
+    p = Factory(:person_1)
+    assert_equal(false, p.is_student)
+    p.ministry_involvements.delete_all
+    assert_equal(true, p.is_student)
+  end
+
+  def test_setup_and_create_access
+    Factory(:AccoutnadminAccessgroup_1)
+    Factory(:person_1).setup_and_create_access(Factory(:user_1))
+
+    assert_equal(Factory(:user_1), ::AccountadminVieweraccessgroup.first.user)
+    assert_equal(Factory(:AccoutnadminAccessgroup_1).id, ::AccountadminVieweraccessgroup.first.accessgroup_id)
+    assert_equal(Factory(:user_1), Factory(:person_1).user)
+  end
+
   def test_relationships
     assert_not_nil(@personfirst.campus_involvements)
     assert_not_nil(@personfirst.campuses)
