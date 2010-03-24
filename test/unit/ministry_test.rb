@@ -49,7 +49,13 @@ class MinistryTest < ActiveSupport::TestCase
   end
 
   def test_ministry_roles
-    assert_equal Ministry.find(1).ministry_roles, MinistryRole.find_all_by_ministry_id(1)
+    ministry_ministry_roles = Ministry.find(1).ministry_roles
+    ministry_role_ministry_roles = MinistryRole.find_all_by_ministry_id(1)
+
+    ministry_ministry_roles.sort! { |a,b| a.id <=> b.id }
+    ministry_role_ministry_roles.sort! { |a,b| a.id <=> b.id }
+
+    assert_equal ministry_ministry_roles, ministry_role_ministry_roles
   end
 
   def test_staff_roles
