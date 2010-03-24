@@ -22,6 +22,6 @@ class MinistryRoleTest < ActiveSupport::TestCase
     assert_equal(Factory(:ministryrole_9), MinistryRole.default_staff_role)
 
     StaffRole.find_by_name(%w(Missionary missionary Staff staff)).destroy
-    assert_equal(StaffRole.find(2), MinistryRole.default_staff_role)
+    assert_equal(StaffRole.find(11), MinistryRole.default_staff_role)
   end
 end
