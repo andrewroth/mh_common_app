@@ -26,10 +26,10 @@ class UserTest < ActiveSupport::TestCase
   def test_in_access_group
     u = Factory(:user_1)
 
-    Factory(:AccountadminVieweraccessgroup_1)
-    Factory(:AccountadminVieweraccessgroup_2)
-    Factory(:AccountadminAccessgroup_1)
-    Factory(:AccountadminAccessgroup_2)
+    Factory(:accountadminvieweraccessgroup_1)
+    Factory(:accountadminvieweraccessgroup_2)
+    Factory(:accountadminaccessgroup_1)
+    Factory(:accountadminaccessgroup_2)
 
     assert_equal(true, u.in_access_group(1, 36))
     assert_equal(true, u.in_access_group(1))
