@@ -11,33 +11,72 @@ class UserTest < ActiveSupport::TestCase
 #    u = User.authenticate('josh.starcher@example.com', 'test')
 #    assert u.is_a?(User)
 #  end
-  
+
+  def test_human_is_active
+    u = Factory(:user_1)
+    assert_equal('no', Factory(:user_1).human_is_active)
+    u.is_active = 1
+    u.save
+    assert_equal('yes', Factory(:user_1).human_is_active)
+    u.is_active = 0
+    u.save
+    assert_equal('no', Factory(:user_1).human_is_active)
+  end
+
+  def test_in_access_group
+    u = Factory(:user_1)
+
+    Factory(:AccountadminVieweraccessgroup_1)
+    Factory(:AccountadminVieweraccessgroup_2)
+    Factory(:AccountadminAccessgroup_1)
+    Factory(:AccountadminAccessgroup_2)
+
+    assert_equal(true, u.in_access_group(1, 36))
+    assert_equal(true, u.in_access_group(1))
+    assert_equal(true, u.in_access_group(36))
+    assert_equal(true, u.in_access_group(1, 240))
+    assert_equal(false, u.in_access_group(240))
+    assert_equal(false, u.in_access_group(23, 2, 999999, 0))
+  end
+
+  def test_search
+    Factory(:user_1)
+    Factory(:user_2)
+    Factory(:user_3)
+    Factory(:user_4)
+    setup_accountadmin_accountgroups
+    assert_equal([Factory(:user_1)], ::User.search("josh", 1, 10))
+    assert_equal([Factory(:user_4)], ::User.search("8a4ea810", 1, 10))
+    assert_equal(::User.all(:conditions => "viewer_id IN (1, 2, 3)"), ::User.search("@", 1, 10))
+    assert_equal(nil, ::User.search(nil, 1, 1))
+  end
+
   def test_new_password_validation
     @user.update_attributes(:plain_password => 'blahbas')
     assert_equal(1, @user.errors.size) # no mathing confirmation
-    
+
     @user.update_attributes(:plain_password => 'blah', :password_confirmation => 'blah')
     assert_equal(1, @user.errors.size) # not long enough
-    
+
     @user.update_attributes(:plain_password => 'blahblah', :password_confirmation => 'blahblah')
     assert_equal(0, @user.errors.size) # no errors
   end
-  
+
   def test_user_token_nil
     assert !@user.remember_token?
   end
-  
+
   def test_set_remember_me
     @user.remember_me
     assert @user.remember_token?
   end
-  
+
   def test_forget_me
     test_set_remember_me
     @user.forget_me
     test_user_token_nil
   end
-  
+
 #  def test_set_remember_me
 #    @user.remember_me
 #    assert @user.remember_token?
@@ -71,7 +110,7 @@ class UserTest < ActiveSupport::TestCase
     p.save
     p.create_user_and_access_only("test_guid_2", "test_username_2")
     atts["ssoGuid"] = "test_guid_2"
-    
+
     cast = CasTicket.new
     casr = CasReceipt.new
     cast.stubs(:response).returns(casr)
