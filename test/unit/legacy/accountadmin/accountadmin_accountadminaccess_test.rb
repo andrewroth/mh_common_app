@@ -17,17 +17,28 @@ class AccountadminAccessTest < ActiveSupport::TestCase
     end
   end
 
-  def test_human_privilege
+  def test_human_privilege_site
     setup_cim_hrdb_privs
 
     Factory(:user_1)
     a = Factory(:accountadminaccountadminaccess_1)
 
     assert_equal('site', a.human_privilege)
+  end
 
+  def test_human_privilege_group
     Factory(:user_3)
     a = Factory(:accountadminaccountadminaccess_3)
 
     assert_equal('group', a.human_privilege)
+  end
+
+  def test_human_privilege_else
+    Factory(:user_3)
+    a = Factory(:accountadminaccountadminaccess_3)
+    a.privilege = 3
+    a.save_with_validation(false)
+
+    assert_equal('unknown', a.human_privilege)
   end
 end
