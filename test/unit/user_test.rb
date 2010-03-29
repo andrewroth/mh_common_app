@@ -135,6 +135,33 @@ class UserTest < ActiveSupport::TestCase
 
     assert_equal("test_username_3", u.username)
     assert_equal(atts["ssoGuid"], u.guid)
+   
+    # test rescues the viewer_userID set from receipt.user when receipt.user is too short
+    p = Person.last
+    atts["ssoGuid"] = "test_guid_2"
+
+    cast = CasTicket.new
+    casr = CasReceipt.new
+    cast.stubs(:response).returns(casr)
+    casr.stubs(:user).returns("short")
+
+    u = User.find_or_create_from_cas(cast)
+
+    assert_equal("short", u.username)
+    assert_equal(atts["ssoGuid"], u.guid)
+  end
+
+  def test_username=
+    @user = Factory(:user_1)
+    $test_coverage_override = true
+    @user.username = "Bobsyeruncle"
+    $test_coverage_override = false
+  end
+
+  def test_login_callback
+    setup_default_user
+    @user = Factory(:user_1)
+    @user.login_callback
   end
 end
 
