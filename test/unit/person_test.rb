@@ -66,6 +66,7 @@ class PersonTest < ActiveSupport::TestCase
     MinistryInvolvement.delete_all
 
     p = Factory(:person_1)
+    u = Factory(:user_1)
     setup_assignmentstatuses
     Factory(:assignment_1)
     Factory(:cimhrdbstaff_1)
@@ -73,6 +74,9 @@ class PersonTest < ActiveSupport::TestCase
     Factory(:ministry_1)
 
     p.map_cim_hrdb_to_mt
+
+    p.ministry_involvements.reload
+    assert(p.ministry_involvements.detect{ |mi| mi.ministry.name == "Campus for Christ" })
   end
 
   def test_get_highest_assignment
@@ -91,7 +95,6 @@ class PersonTest < ActiveSupport::TestCase
   end
 
   def test_upgrade_ministry_involvement
-    flunk("this test doesn't work yet, mi isn't being saved in second upgrade_ministry_involvement call")
     p = Factory(:person_111)
 
     assert_equal([], p.ministry_involvements)
@@ -100,6 +103,28 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal(::StudentRole, p.ministry_involvements.first.ministry_role.class)
 
     p.upgrade_ministry_involvement(Factory(:ministry_1), Factory(:ministryrole_9))
+    p.ministry_involvements.reload
+    assert_equal(::StaffRole, p.ministry_involvements.first.ministry_role.class)
+    assert_equal(1, p.ministry_involvements.size)
+  end
+
+  def test_upgrade_ministry_involvement_doesnt_demote
+    p = Factory(:person_111)
+
+    assert_equal([], p.ministry_involvements)
+
+    p.upgrade_ministry_involvement(Factory(:ministry_1), Factory(:ministryrole_9))
+    p.ministry_involvements.reload
+    assert_equal(::StaffRole, p.ministry_involvements.first.ministry_role.class)
+    assert_equal(1, p.ministry_involvements.size)
+
+    p.upgrade_ministry_involvement(Factory(:ministry_1), Factory(:ministryrole_6))
+    p.ministry_involvements.reload
+    assert_equal(::StaffRole, p.ministry_involvements.first.ministry_role.class)
+    assert_equal(1, p.ministry_involvements.size)
+
+    p.upgrade_ministry_involvement(Factory(:ministry_1), Factory(:ministryrole_10))
+    p.ministry_involvements.reload
     assert_equal(::StaffRole, p.ministry_involvements.first.ministry_role.class)
     assert_equal(1, p.ministry_involvements.size)
   end
@@ -116,11 +141,15 @@ class PersonTest < ActiveSupport::TestCase
     setup_assignments
     setup_assignmentstatuses
     setup_ministry_campuses
-    Factory(:user_1)
+    u = Factory(:user_1)
     Factory(:access_1)
     Factory(:cimhrdbpersonyear_1)
     Factory(:cimhrdbstaff_1)
     p = Factory(:person_1)
+
+    # clear out email so that it's set from viewer_userID
+    p.person_email = ""
+    p.save!
 
     p.map_cim_hrdb_to_mt_old
 
@@ -133,6 +162,8 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal(Factory(:campus_1).id, p.campus_involvements.first.campus_id)
     assert_equal(Factory(:ministry_6).id, p.campus_involvements.first.ministry_id)
     assert_equal(Factory(:schoolyear_10).name, p.campus_involvements.first.school_year.name)
+
+    assert_equal(p.email, u.viewer_userID)
   end
 
   def test_map_cim_hrdb_to_mt_old_not_staff
@@ -458,6 +489,14 @@ class PersonTest < ActiveSupport::TestCase
       p.user = "Bob"
     rescue
     end
+  end
+
+  def test_birth_date=
+    p = Factory(:person_1)
+    birth_date = 20.years.ago.to_date
+    p.birth_date = birth_date
+    p.save!
+    assert_equal(birth_date, Person.find(p.id).birth_date)
   end
 end
 
