@@ -24,6 +24,16 @@ class CampusInvolvementTest < ActiveSupport::TestCase
     assert_equal(mi.ministry_role_id, 7)
   end
 
+  def test_find_ministry_involvement_not_student_role_with_deleted_ministry_role
+    Factory(:person_1)
+    mi1 = Factory(:ministryinvolvement_1)
+    Factory(:ministryinvolvement_2)
+    mi1.ministry_role_id = nil
+    mi1.save!
+    mi = Factory(:campusinvolvement_3).find_or_create_ministry_involvement
+    assert_equal(::StudentRole.default_student_role.id, mi.ministry_role_id)
+  end
+
   def test_validate
     Factory(:campusinvolvement_2)
     Factory(:campus_1)
