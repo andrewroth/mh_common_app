@@ -61,7 +61,7 @@ class PersonTest < ActiveSupport::TestCase
   end
 
   def test_map_cim_hrdb_to_mt
-    flunk("this test doesn't work yet, mc.try(:ministry) is returning nil")
+    setup_assignments
     CampusInvolvement.delete_all
     MinistryInvolvement.delete_all
 
@@ -102,6 +102,12 @@ class PersonTest < ActiveSupport::TestCase
     p.upgrade_ministry_involvement(Factory(:ministry_1), Factory(:ministryrole_9))
     assert_equal(::StaffRole, p.ministry_involvements.first.ministry_role.class)
     assert_equal(1, p.ministry_involvements.size)
+  end
+
+  def test_sync_cim_hrdb
+    p = Factory(:person_1)
+    p.expects(:map_cim_hrdb_to_mt)
+    p.sync_cim_hrdb
   end
 
   def test_map_cim_hrdb_to_mt_old
@@ -436,6 +442,23 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal("test_address1", a.address1)
   end
 
+  def test_person_extra
+    p = Factory(:person_1)
+    p.save!
+  end
+
+  def test_user
+    p = Factory(:person_1)
+    p.user
+  end
+
+  def test_user=
+    p = Factory(:person_1)
+    begin
+      p.user = "Bob"
+    rescue
+    end
+  end
 end
 
 class GcxTicket ; end
