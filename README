@@ -1,14 +1,16 @@
 How to run test coverage for Canadian code:
 
-  rake test:coverage:plugin:units PLUGIN=mh_common/lib/common/core/ca/\\\|mh_common/lib/legacy/\\\|mh_common/lib/pulse/
+  rake test:coverage:plugin:units PLUGIN=mh_common/lib/common/core/ca/\\\|mh_common/lib/legacy/\\\|mh_common/lib/pulse/ca/
 
 without reg:
 
-  rake test:coverage:plugin:units PLUGIN=mh_common/lib/common/core/ca/\\\|mh_common/lib/legacy/\\\(accountadmin\\\|hrdb\\\|site\\\|stats\\\)/\\\|mh_common/lib/pulse/
+  rake test:coverage:plugin:units PLUGIN=mh_common/lib/common/core/ca/\\\|mh_common/lib/legacy/\\\(accountadmin\\\|hrdb\\\|site\\\|stats\\\)/\\\|mh_common/lib/pulse/ca/
 
 To make things easier you can create a shell alias, to do this with the Bash shell open ~/.bashrc and paste in the following line:
 
   alias rtcpuca="rake test:coverage:plugin:units PLUGIN=mh_common/lib/common/core/ca/\\\\\|mh_common/lib/legacy/\\\\\|mh_common/lib/pulse/"
+
+  TODO: Sheldon to make an alias of the without-reg version
 
   rtcpuca stands for "rake test:coverage:plugin:units canada"
 

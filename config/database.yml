@@ -2,7 +2,7 @@ defaults: &defaults
   adapter: mysql
   username: root
   password: 
-  socket: /var/run/mysqld/mysqld.sock
+  socket: /private/var/mysql/mysql.sock
   host: localhost
 
 development:
