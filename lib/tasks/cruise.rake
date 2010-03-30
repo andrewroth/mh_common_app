@@ -16,8 +16,8 @@ namespace :cruise do
       $logger.info "Detected another test going on.  Waiting 30 seconds."
       sleep 30
     end
-    $logger.info "Locking mh_common"
     $lock = File.open($lock_path, "w")
+    $logger.info "Established mh_common lock"
   end
 end
 
