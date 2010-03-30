@@ -1,0 +1,13 @@
+<%= 
+dbh = "#{RAILS_ROOT}/config/database/database_header.yml"; dbhd = dbh+".default";
+file = File.exists?(dbh) ? dbh : dbhd
+File.read(file).chomp
+%>
+
+development:
+  database: mh_common_test
+  <<: *defaults
+
+test:
+  database: mh_common_test
+  <<: *defaults
