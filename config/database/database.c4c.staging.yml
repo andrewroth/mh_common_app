@@ -16,7 +16,7 @@ production:
   database: c4c_pulse_staging
   <<: *defaults
 
-ciministry_stagingelopment:
+ciministry_development:
   database: c4c_intranet_staging
   <<: *defaults
 
