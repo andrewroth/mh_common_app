@@ -1,5 +1,7 @@
 How to run test coverage for Canadian code:
 
+  rake db:test:prepare:all
+
   rake test:coverage:plugin:units PLUGIN=mh_common/lib/common/core/ca/\\\|mh_common/lib/legacy/\\\|mh_common/lib/pulse/ca/
 
 without reg:
