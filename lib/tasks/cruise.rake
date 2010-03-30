@@ -8,7 +8,7 @@ namespace :cruise do
   task :prepare => :environment do
     $logfile = File.open(Rails.root.join("log/cruise.log", "a"))
     $logfile.sync = true
-    $logfile.info "Starting"
+    $logfile.info "Starting #{Time.now}"
     ENV['PLUGIN'] = "mh_common/lib/common/core/ca/\\|mh_common/lib/legacy/\\|mh_common/lib/pulse/"
     $lock_path = File.expand_path("~/.cruise/mh_common_lock")
     while File.exists?($lock_path)
@@ -20,9 +20,10 @@ namespace :cruise do
   end
 end
 
-task :cruise => [ "cruise:prepare", "test:coverage:plugin:units" ] do
+task :cruise => [ "cruise:prepare" ] do
+  Rake::Task["test:coverage:plugin:units"].execute
   $logfile.info "Finished tests, closing lock"
   $lock.close
   File.delete($lock_path)
-  $logfile.info "Done
+  $logfile.info "Done #{Time.now}"
 end
