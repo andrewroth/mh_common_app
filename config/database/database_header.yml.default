@@ -2,4 +2,4 @@ defaults: &defaults
   adapter: mysql
   username: root
   password:
-  host: /var/run/mysqld/mysqld.sock
+  socket: /var/run/mysqld/mysqld.sock
