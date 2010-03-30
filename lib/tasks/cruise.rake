@@ -22,9 +22,12 @@ namespace :cruise do
 end
 
 task :cruise => [ "cruise:prepare" ] do
-  Rake::Task["test:coverage:plugin:units"].execute
-  $logger.info "Finished tests, closing lock"
-  $lock.close
-  File.delete($lock_path)
-  $logger.info "Done #{Time.now}"
+  begin
+    Rake::Task["test:coverage:plugin:units"].execute
+  rescue
+    $logger.info "Finished tests, closing lock"
+    $lock.close
+    File.delete($lock_path)
+    $logger.info "Done #{Time.now}"
+  end
 end
