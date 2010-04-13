@@ -264,6 +264,20 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal("test_address1", a.address1)
   end
 
+  def test_search
+    assert_equal([Factory(:person_1)], Person.search("Josh", 1, 10))
+    assert_equal([Person.find(2)], Person.search("A2", 1, 10))
+    assert_equal(Person.all(:conditions => "id IN (1, 2, 3, 111, 50000)"), ::Person.search("A", 1, 10))
+    assert_equal(nil, Person.search(nil, 1, 1))
+  end
+
+  def test_search_by_name
+    assert_equal([Factory(:person_1)], Person.search_by_name("Josh"))
+    assert_equal([Factory(:person_1)], Person.search_by_name("Josh Starcher"))
+    assert_equal([Person.find(2)], Person.search_by_name("A2"))
+    assert_equal([ Person.find(1), Person.find(2), Person.find(3), Person.find(50000), Person.find(111)], ::Person.search_by_name("A"))
+    assert_equal(nil, Person.search_by_name(nil))
+  end
 end
 
 class GcxTicket ; end
