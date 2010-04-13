@@ -6,4 +6,5 @@
 # is done in order listed here and stops on the first match.
 #
 - /dev/: database/database.dev.yml
+- /master/: database/database.dev.yml
 - c4c.dev: database/database.c4c.dev.yml
