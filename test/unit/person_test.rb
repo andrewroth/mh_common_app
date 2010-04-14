@@ -503,6 +503,54 @@ class PersonTest < ActiveSupport::TestCase
     p = Factory(:person_1)
     assert_equal false, p.is_staff?
   end
+
+  def test_person_year_when_exists
+    Factory(:cimhrdbpersonyear_1)
+    Factory(:cimhrdbpersonyear_2)
+    p = Factory(:person_1)
+    count_before = CimHrdbPersonYear.count
+    assert_equal CimHrdbPersonYear.first, p.person_year
+    assert_equal count_before, CimHrdbPersonYear.count
+  end
+
+  def test_person_year_when_doesnt_exist
+    p = Factory(:person_1)
+    p.person_year
+    assert_equal CimHrdbPersonYear.first, p.person_year
+    assert_equal 1, CimHrdbPersonYear.count
+    assert_equal ::SchoolYear.default_year_id, CimHrdbPersonYear.first.year_id
+  end
+
+  def test_year_in_school
+    p = Factory(:person_1)
+    assert_equal SchoolYear.find(9), p.year_in_school
+  end
+
+  def test_year_in_school_id
+    p = Factory(:person_1)
+    p.person_year
+    assert_equal 9, p.year_in_school_id
+  end
+
+  def test_year_in_school_id_none
+    p = Factory(:person_1)
+    assert_equal nil, p.year_in_school_id
+  end
+
+  def test_permanent_same_as_local_false
+    p = Factory(:person_1)
+    assert_equal false, p.permanent_same_as_local
+  end
+
+  def test_permanent_same_as_local_true
+    p = Factory(:person_1)
+    p.person_city = p.person_local_city = "City"
+    p.person_addr = p.person_local_addr = "Addr"
+    p.person_pc = p.person_local_pc = "PC"
+    p.person_phone = p.person_local_phone = "phone"
+    p.person_province_id = p.person_local_province_id = 1
+    assert_equal true, p.permanent_same_as_local
+  end
 end
 
 class GcxTicket ; end
