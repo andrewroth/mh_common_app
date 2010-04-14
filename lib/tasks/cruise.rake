@@ -10,7 +10,7 @@ namespace :cruise do
     $logfile.sync = true
     $logger = CustomLogger.new($logfile)
     $logger.info "Starting #{Time.now}"
-    ENV['PLUGIN'] = "mh_common/lib/common/core/ca/\\|mh_common/lib/legacy/\\|mh_common/lib/pulse/"
+    ENV['PLUGIN'] = "mh_common/lib/common/core/ca/\\|mh_common/lib/legacy/\\(accountadmin\\|hrdb\\|site\\|stats\\)\\|mh_common/lib/pulse/"
     $lock_path = File.expand_path("~/.cruise/mh_common_lock")
     while File.exists?($lock_path)
       $logger.info "Detected another test going on.  Waiting 30 seconds."
