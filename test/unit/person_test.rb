@@ -498,6 +498,11 @@ class PersonTest < ActiveSupport::TestCase
     p.save!
     assert_equal(birth_date, Person.find(p.id).birth_date)
   end
+
+  def test_is_staff?
+    p = Factory(:person_1)
+    assert_equal false, p.is_staff?
+  end
 end
 
 class GcxTicket ; end
