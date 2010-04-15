@@ -31,5 +31,10 @@ task :cruise => [ "cruise:prepare" ] do
     $lock.close
     File.delete($lock_path)
     $logger.info "Done #{Time.now}"
+    out = ENV['CC_BUILD_ARTIFACTS']
+    if out
+      FileUtils.mkdir_p out unless File.directory?
+      FileUtils.mv "coverage", out
+    end
   end
 end
