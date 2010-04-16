@@ -35,7 +35,7 @@ task :cruise => [ "cruise:prepare" ] do
     $logger.info "ENV['CC_BUILD_ARTIFACTS'] = #{out}"
     if out
       FileUtils.mkdir_p(out) unless File.directory?(out)
-      FileUtils.cp "coverage", out
+      FileUtils.cp_r "coverage", out
     end
   end
 end
