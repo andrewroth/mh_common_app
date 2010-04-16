@@ -12,7 +12,6 @@ class AssignmentTest < ActiveSupport::TestCase
   def test_associations
     @assignment = Assignment.first
     @assignment.assignmentstatus
-    @assignment.status
     @assignment.person
     @assignment.campus
   end
