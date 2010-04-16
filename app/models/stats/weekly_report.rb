@@ -1,4 +1,4 @@
-class Weeklyreport < ActiveRecord::Base
+class WeeklyReport < ActiveRecord::Base
   load_mappings
   include Legacy::Stats::WeeklyReport
 end
