@@ -26,6 +26,7 @@ task :cruise => [ "cruise:prepare" ] do
     Rake::Task["test:coverage:plugin:units"].execute
   rescue
     $logger.info "In rescue block"
+    raise
   ensure
     $logger.info "Finished tests, closing lock"
     $lock.close
