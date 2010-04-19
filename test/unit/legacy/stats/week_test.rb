@@ -6,6 +6,8 @@ class WeekTest < ActiveSupport::TestCase
     setup_weeks
     setup_campuses
     setup_weeklyreports
+    setup_ministries
+    setup_ministry_campuses
   end
 
   def test_find_stats_staff
@@ -15,11 +17,21 @@ class WeekTest < ActiveSupport::TestCase
     assert_equal(6, ::Week.find_stats_staff(2, 2, hs_pres, 3))
   end
 
+  def test_find_ministry_stats_week
+    assert_equal(4, ::Week.find_ministry_stats_week(1, 2, gos_pres_std))
+    assert_equal(265, ::Week.find_ministry_stats_week(2, 1, gos_pres))
+  end
+
   def test_find_stats_week
     assert_equal(10, ::Week.find_stats_week(1, 5, gos_pres_std))
     assert_equal(44, ::Week.find_stats_week(2, 5, gos_pres))
     assert_equal(121, ::Week.find_stats_week(2, 6, sp_conv))
     assert_equal(155, ::Week.find_stats_week(2, national_region, sp_conv))
+  end
+
+  def test_find_ministry_stats_month
+    assert_equal(58, ::Week.find_ministry_stats_month(1, 2, hs_pres))
+    assert_equal(225, ::Week.find_ministry_stats_month(2, 1, sp_conv))
   end
 
   def test_find_stats_month
@@ -35,6 +47,11 @@ class WeekTest < ActiveSupport::TestCase
     assert_equal(0, ::Week.find_stats_semester(12, 6, hs_pres))
     assert_equal(631, ::Week.find_stats_semester(12, 5, hs_pres))
     assert_equal(231, ::Week.find_stats_semester(12, national_region, sp_conv))
+  end
+
+  def test_find_stats_semester_ministry
+    assert_equal(68, ::Week.find_stats_semester_ministry(11, 2, sp_conv_std))
+    assert_equal(231, ::Week.find_stats_semester_ministry(12, 1, sp_conv))
   end
 
   def test_find_stats_semester_campus

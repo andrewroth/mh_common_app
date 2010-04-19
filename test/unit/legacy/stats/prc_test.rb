@@ -6,6 +6,19 @@ class PrcTest < ActiveSupport::TestCase
     assert_equal('yes', Factory(:prc_1).human_integrated_believer)
   end
 
+  def test_count_by_date_per_ministry
+    setup_prcs
+    setup_campuses
+    setup_ministries
+    setup_ministry_campuses
+
+    assert_equal(6, ::Prc.count_by_date_per_ministry("2009-12-01", "2010-04-01", 1))
+    assert_equal(3, ::Prc.count_by_date_per_ministry("2010-01-31", "2010-04-01", 1))
+    assert_equal(2, ::Prc.count_by_date_per_ministry("2010-02-01", "2010-04-01", 1))
+    assert_equal(0, ::Prc.count_by_date_per_ministry("2010-02-01", "2010-06-01", 2))
+    assert_equal(1, ::Prc.count_by_date_per_ministry("2010-01-01", "2010-06-01", 2))
+  end
+
   def test_count_by_date
     setup_prcs
     setup_campuses
@@ -29,6 +42,18 @@ class PrcTest < ActiveSupport::TestCase
     assert_equal(2, ::Prc.count_by_semester(11, Factory(:region_5).id))
     assert_equal(1, ::Prc.count_by_semester(10, Factory(:region_5).id))
     assert_equal(5, ::Prc.count_by_semester(11, Factory(:region_4).id))
+  end
+
+  def test_count_by_semester_and_ministry
+    setup_prcs
+    setup_campuses
+    setup_ministries
+    setup_ministry_campuses
+
+    assert_equal(5, ::Prc.count_by_semester_and_ministry(11, 1))
+    assert_equal(1, ::Prc.count_by_semester_and_ministry(10, 1))
+    assert_equal(1, ::Prc.count_by_semester_and_ministry(11, 2))
+    assert_equal(0, ::Prc.count_by_semester_and_ministry(10, 2))
   end
 
   def test_count_by_semester_and_campus
