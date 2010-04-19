@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100329163320) do
+ActiveRecord::Schema.define(:version => 20100125211110) do
 
   create_table "addresses", :force => true do |t|
     t.integer "person_id"
@@ -144,8 +144,6 @@ ActiveRecord::Schema.define(:version => 20100329163320) do
     t.string  "country"
     t.string  "code"
     t.boolean "is_closed"
-    t.string  "iso_code"
-    t.boolean "closed",    :default => false
   end
 
   create_table "custom_attributes", :force => true do |t|
@@ -219,6 +217,8 @@ ActiveRecord::Schema.define(:version => 20100329163320) do
     t.string   "css_class"
     t.decimal  "weight",       :precision => 4, :scale => 2
   end
+
+  add_index "free_times", ["timetable_id"], :name => "free_times_timetable_id"
 
   create_table "group_involvements", :force => true do |t|
     t.integer "person_id"
