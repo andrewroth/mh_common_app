@@ -499,9 +499,9 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal(birth_date, Person.find(p.id).birth_date)
   end
 
-  def test_is_staff?
+  def test_is_hrdb_staff?
     p = Factory(:person_1)
-    assert_equal false, p.is_staff?
+    assert_equal false, p.is_hrdb_staff?
   end
 
   def test_person_year_when_exists
