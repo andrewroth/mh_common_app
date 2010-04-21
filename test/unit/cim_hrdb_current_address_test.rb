@@ -11,7 +11,7 @@ class CimHrdbCurrentAddressTest < ActiveSupport::TestCase
 
   def test_state
     mailing = CimHrdbCurrentAddress.find(50000).mailing
-    assert_equal "#1 Josh Street Local<br />JoshCity Local", mailing
+    assert_equal "#1 Josh Street Local<br />JoshCity Local<br />ZZZZZZ", mailing
   end
 
   def test_start_date=

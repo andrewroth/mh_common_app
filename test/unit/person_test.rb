@@ -250,6 +250,18 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal nil, p.human_gender
   end
 
+  def test_gender_male
+    p = Person.new
+    p.gender = 'M'
+    assert_equal 1, p.gender_id
+  end
+
+  def test_gender_female
+    p = Person.new
+    p.gender = 'F'
+    assert_equal 2, p.gender_id
+  end
+
   def test_initiate_addresses
     p = Person.new
     p.initialize_addresses
@@ -550,6 +562,98 @@ class PersonTest < ActiveSupport::TestCase
     p.person_phone = p.person_local_phone = "phone"
     p.person_province_id = p.person_local_province_id = 1
     assert_equal true, p.permanent_same_as_local
+  end
+
+  def test_hrdb_student_campus_current_student_no_options
+    setup_assignmentstatuses
+    setup_assignments
+    p = Factory(:person_1)
+    assert_equal Campus.find(3), p.hrdb_student_campus
+  end
+
+  def test_hrdb_student_campus_current_student_with_search_arrays
+    setup_assignmentstatuses
+    setup_assignments
+    p = Factory(:person_1)
+    assert_equal Campus.find(3), p.hrdb_student_campus(:search_arrays => true)
+  end
+
+  def test_hrdb_student_campus_current_student_no_options
+    setup_assignmentstatuses
+    setup_assignments
+    p = Factory(:person_1)
+    assert_equal Campus.find(3), p.hrdb_student_campus
+  end
+
+  def test_hrdb_student_campus_current_student_unknown_no_options
+    setup_assignmentstatuses
+    setup_assignments
+    p = Factory(:person_3)
+    assert_equal Campus.find(1), p.hrdb_student_campus
+  end
+
+  def test_hrdb_student_campus_current_student_unknown_with_search_arrays
+    setup_assignmentstatuses
+    setup_assignments
+    p = Factory(:person_3)
+    assert_equal Campus.find(1), p.hrdb_student_campus(:search_arrays => true)
+  end
+
+  def test_hrdb_student_campus_not_found
+    p = Factory(:person_1)
+    assert_equal nil, p.hrdb_student_campus
+  end
+
+  def test_is_staff_somewhere?
+    p = Factory(:person_1)
+    assert p.is_staff_somewhere?
+  end
+
+  def test_gender_short_male
+    setup_people
+    setup_genders
+    assert_equal 'M', Factory(:person_1).gender_short
+  end
+
+  def test_gender_short_female
+    setup_people
+    setup_genders
+    assert_equal 'F', Factory(:person_3).gender_short
+  end
+  def test_gender_short_unknown
+    setup_people
+    setup_genders
+    assert_equal '?', Factory(:person_5).gender_short
+  end
+
+  def test_aliases
+    setup_people
+    Factory(:state_1)
+    Factory(:state_2)
+    Factory(:country_1)
+    Factory(:country_2)
+    p = Factory(:person_1)
+    p.person_local_province_id = 1
+    p.person_local_country_id = 2
+    p.save!
+    assert_equal "Josh", p.legal_first_name
+    assert_equal "Starcher", p.legal_last_name
+    assert_equal "999-999-9999", p.permanent_phone
+    assert_equal "#1 Josh Street", p.permanent_address
+    assert_equal "JoshCity", p.permanent_city
+    assert_equal "California", p.permanent_province
+    assert_equal "CA", p.permanent_province_short
+    assert_equal "United States", p.permanent_country
+    assert_equal "USA", p.permanent_country_short
+    assert_equal "A1A1A1", p.permanent_postal_code
+    assert_equal "000-000-0000", p.local_phone
+    assert_equal "#1 Josh Street Local", p.local_address
+    assert_equal "JoshCity Local", p.local_city
+    assert_equal "ZZZZZZ", p.local_postal_code
+    assert_equal "California", p.local_province
+    assert_equal "CA", p.local_province_short
+    assert_equal "Canada", p.local_country
+    assert_equal "CA", p.local_country_short
   end
 end
 
