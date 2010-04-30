@@ -235,7 +235,7 @@ class PersonTest < ActiveSupport::TestCase
   end
 
   test "import gcx profile" do
-    attrib = [{"value" => "test_email", "displayname" => "emailAddress"},
+    attrib = [{"value" => "test@email.com", "displayname" => "emailAddress"},
               {"value" => "test_city", "displayname" => "city"},
               {"value" => "test_phone", "displayname" => "landPhone"},
               {"value" => "test_alternate_phone", "displayname" => "mobilePhone"},
@@ -256,7 +256,7 @@ class PersonTest < ActiveSupport::TestCase
 
     a = ::Person.find(50000).current_address
 
-    assert_equal("test_email", a.email)
+    assert_equal("test@email.com", a.email)
     assert_equal("test_city", a.city)
     assert_equal("test_phone", a.phone)
     assert_equal("test_alternate_phone", a.alternate_phone)
