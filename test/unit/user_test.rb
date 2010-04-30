@@ -45,7 +45,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_to_liquid
-    assert_equal(Date.today, Date.strptime(Factory(:user_1).to_liquid["created_at"].to_s))
+    assert_equal Hash, Factory(:user_1).to_liquid.class
   end
 
   def test_find_or_create_from_cas
