@@ -106,7 +106,8 @@ class UserTest < ActiveSupport::TestCase
 
 
     # test user already exists with guid
-    p = Person.new(:first_name => "test_firstname", :last_name => "test_lastname")
+    p = Person.new(:first_name => "test_firstname", :last_name => "test_lastname", 
+                   :person_legal_fname => '', :person_legal_lname => '')
     p.save
     p.create_user_and_access_only("test_guid_2", "test_username_2")
     atts["ssoGuid"] = "test_guid_2"

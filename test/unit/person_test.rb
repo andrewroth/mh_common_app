@@ -12,6 +12,7 @@ class PersonTest < ActiveSupport::TestCase
     setup_addresses
     setup_campuses
     setup_ministries
+    setup_genders
     Factory(:ministrycampus_1)
     Factory(:ministrycampus_2)
     Factory(:ministrycampus_3)
@@ -267,7 +268,8 @@ class PersonTest < ActiveSupport::TestCase
     p.initialize_addresses
     assert_not_nil p.current_address
     assert_not_nil p.permanent_address
-    assert_not_nil p.emergency_address
+    #assert_not_nil p.emergency_address # one of the rare inline changes from dev branch
+                                        # there is no emergency_address in the Cdn schema 
   end
 
   def test_find_exact_from_username
@@ -639,21 +641,17 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal "Josh", p.legal_first_name
     assert_equal "Starcher", p.legal_last_name
     assert_equal "999-999-9999", p.permanent_phone
-    assert_equal "#1 Josh Street", p.permanent_address
+    assert_equal "#1 Josh Street", p.permanent_address_line1
     assert_equal "JoshCity", p.permanent_city
-    assert_equal "California", p.permanent_province
-    assert_equal "CA", p.permanent_province_short
-    assert_equal "United States", p.permanent_country
-    assert_equal "USA", p.permanent_country_short
+    assert_equal "CA", p.permanent_province
+    assert_equal "USA", p.permanent_country
     assert_equal "A1A1A1", p.permanent_postal_code
     assert_equal "000-000-0000", p.local_phone
     assert_equal "#1 Josh Street Local", p.local_address
     assert_equal "JoshCity Local", p.local_city
     assert_equal "ZZZZZZ", p.local_postal_code
-    assert_equal "California", p.local_province
-    assert_equal "CA", p.local_province_short
-    assert_equal "Canada", p.local_country
-    assert_equal "CA", p.local_country_short
+    assert_equal "CA", p.local_province
+    assert_equal "CA", p.local_country
   end
 end
 
