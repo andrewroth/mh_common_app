@@ -644,6 +644,7 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal "#1 Josh Street", p.permanent_address_line1
     assert_equal "JoshCity", p.permanent_city
     assert_equal "CA", p.permanent_province
+    assert_equal "CA", p.permanent_state
     assert_equal "USA", p.permanent_country
     assert_equal "A1A1A1", p.permanent_postal_code
     assert_equal "000-000-0000", p.local_phone
@@ -651,7 +652,25 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal "JoshCity Local", p.local_city
     assert_equal "ZZZZZZ", p.local_postal_code
     assert_equal "CA", p.local_province
+    assert_equal "CA", p.local_state
     assert_equal "CA", p.local_country
+    assert_equal "", p.permanent_address_line2
+  end
+
+  def test_local_state=
+    Factory(:state_1)
+    Factory(:state_2)
+    p = Factory(:person_1)
+    p.local_state = "SS"
+    assert_equal(2, p.person_local_province_id)
+  end
+
+  def test_permanent_state=
+    Factory(:state_1)
+    Factory(:state_2)
+    p = Factory(:person_1)
+    p.permanent_state = "SS"
+    assert_equal(2, p.province_id)
   end
 end
 
