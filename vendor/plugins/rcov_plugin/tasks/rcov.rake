@@ -42,7 +42,7 @@ def run_coverage(files, custom_params=nil)
 
   rcov_bin = RUBY_PLATFORM =~ /java/ ? "jruby -S rcov" : "rcov"
   aggregate = ENV['AGGREGATE'] ? " --aggregate #{ENV['AGGREGATE']}" : ""
-  rcov = "#{rcov_bin} --rails -Ilib:test --sort coverage --text-report #{exclude}#{aggregate}"
+  rcov = "#{rcov_bin} --rails -Ilib:test --sort coverage --text-report #{exclude}#{aggregate} #{custom_params}"
   puts
   puts
   puts "Running tests..."
@@ -79,6 +79,7 @@ namespace :test do
       task :units do
         if ENV['PLUGIN']
           params = %|--exclude "^(?!(#{ENV['PLUGIN']}))" --include-file /#{ENV['PLUGIN']}/|
+          puts "PARAMS: #{params}"
           run_coverage Dir["test/unit/**/*.rb"], params
         else
           puts "Must set PLUGIN=[plugin name]"
