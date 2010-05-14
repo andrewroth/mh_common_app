@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100125211110) do
+ActiveRecord::Schema.define(:version => 20100422155152) do
 
   create_table "addresses", :force => true do |t|
     t.integer "person_id"
@@ -207,6 +207,25 @@ ActiveRecord::Schema.define(:version => 20100125211110) do
     t.datetime "updated_at"
   end
 
+  create_table "emerg", :primary_key => "emerg_id", :force => true do |t|
+    t.integer "person_id"
+    t.string  "passport_num"
+    t.string  "passport_origin"
+    t.string  "passport_expiry"
+    t.text    "notes"
+    t.text    "meds"
+    t.string  "health_coverage_state"
+    t.string  "health_number"
+    t.string  "medical_plan_number"
+    t.string  "medical_plan_carrier"
+    t.string  "doctor_name"
+    t.string  "doctor_phone"
+    t.string  "dentist_name"
+    t.string  "dentist_phone"
+    t.string  "blood_type"
+    t.string  "blood_rh_factor"
+  end
+
   create_table "free_times", :force => true do |t|
     t.integer  "start_time"
     t.integer  "end_time"
@@ -355,7 +374,7 @@ ActiveRecord::Schema.define(:version => 20100125211110) do
     t.string  "first_name"
     t.string  "last_name"
     t.string  "middle_name"
-    t.string  "preferred_name"
+    t.string  "preferred_first_name"
     t.string  "gender"
     t.string  "year_in_school"
     t.string  "level_of_school"
@@ -373,6 +392,7 @@ ActiveRecord::Schema.define(:version => 20100125211110) do
     t.string  "url",                           :limit => 2000
     t.integer "primary_campus_involvement_id"
     t.integer "mentor_id"
+    t.string  "preferred_last_name"
   end
 
   add_index "people", ["first_name"], :name => "index_people_on_first_name"

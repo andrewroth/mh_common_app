@@ -77,7 +77,6 @@ class UserTest < ActiveSupport::TestCase
     test_user_token_nil
   end
 
-<<<<<<< HEAD:test/unit/user_test.rb
 #  def test_set_remember_me
 #    @user.remember_me
 #    assert @user.remember_token?
