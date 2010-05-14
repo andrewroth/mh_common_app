@@ -237,7 +237,7 @@ month:
   number: month_number
   calendar_year: month_calendaryear
 
-weeklyreport:
+weekly_report:
   id: weeklyReport_id
   spiritual_conversations: weeklyReport_1on1SpConv
   gospel_presentations: weeklyReport_1on1GosPres
