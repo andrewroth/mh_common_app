@@ -458,7 +458,7 @@ class PersonTest < ActiveSupport::TestCase
   end
 
   test "import gcx profile" do
-    attrib = [{"value" => "test_email", "displayname" => "emailAddress"},
+    attrib = [{"value" => "test@email.com", "displayname" => "emailAddress"},
               {"value" => "test_city", "displayname" => "city"},
               {"value" => "test_phone", "displayname" => "landPhone"},
               {"value" => "test_alternate_phone", "displayname" => "mobilePhone"},
@@ -479,7 +479,7 @@ class PersonTest < ActiveSupport::TestCase
 
     a = ::Person.find(50000).current_address
 
-    assert_equal("test_email", a.email)
+    assert_equal("test@email.com", a.email)
     assert_equal("test_city", a.city)
     assert_equal("test_phone", a.phone)
     assert_equal("test_alternate_phone", a.alternate_phone)
@@ -671,6 +671,21 @@ class PersonTest < ActiveSupport::TestCase
     p = Factory(:person_1)
     p.permanent_state = "SS"
     assert_equal(2, p.province_id)
+  end
+
+  def test_search
+    assert_equal([Factory(:person_1)], Person.search("Josh", 1, 10))
+    assert_equal([Person.find(2)], Person.search("A2", 1, 10))
+    assert_equal(Person.all(:conditions => "id IN (1, 2, 3, 111, 50000)"), ::Person.search("A", 1, 10))
+    assert_equal(nil, Person.search(nil, 1, 1))
+  end
+
+  def test_search_by_name
+    assert_equal([Factory(:person_1)], Person.search_by_name("Josh"))
+    assert_equal([Factory(:person_1)], Person.search_by_name("Josh Starcher"))
+    assert_equal([Person.find(2)], Person.search_by_name("A2"))
+    assert_equal([ Person.find(1), Person.find(2), Person.find(3), Person.find(50000), Person.find(111)], ::Person.search_by_name("A"))
+    assert_equal(nil, Person.search_by_name(nil))
   end
 end
 

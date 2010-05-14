@@ -77,6 +77,7 @@ class UserTest < ActiveSupport::TestCase
     test_user_token_nil
   end
 
+<<<<<<< HEAD:test/unit/user_test.rb
 #  def test_set_remember_me
 #    @user.remember_me
 #    assert @user.remember_token?
@@ -87,6 +88,10 @@ class UserTest < ActiveSupport::TestCase
 #    @user.forget_me
 #    test_user_token_nil
 #  end
+
+  def test_to_liquid
+    assert_equal Hash, Factory(:user_1).to_liquid.class
+  end
 
   def test_find_or_create_from_cas
     atts = {"ssoGuid" => "test_ssoGuid", "firstName" => "test_firstName", "lastName" => "test_lastName"}
