@@ -61,6 +61,35 @@ class PersonTest < ActiveSupport::TestCase
     assert_raise(ActiveRecord::RecordNotFound) {::CimHrdbPersonYear.find(yid2)}
   end
 
+  def test_highest_ministry_involvement_with_particular_role
+    assert_equal(1, ::Person.find(50000).highest_ministry_involvement_with_particular_role(::MinistryRole.find(1)).id)
+    assert_equal(nil, ::Person.find(50000).highest_ministry_involvement_with_particular_role(::MinistryRole.find(2)))
+    assert_equal(3, Factory(:person_2).highest_ministry_involvement_with_particular_role(::MinistryRole.find(5)).id)
+    assert_equal(nil, ::Person.find(3000).highest_ministry_involvement_with_particular_role(nil))
+  end
+
+  def test_ministries_involved_in_with_children
+    ministries = ::Person.find(50000).ministries_involved_in_with_children
+    assert_equal([::Ministry.find(1), ::Ministry.find(2), ::Ministry.find(3), ::Ministry.find(6)], ministries.sort! { |a,b| a.id <=>  b.id })
+
+    ministries = ::Person.find(50000).ministries_involved_in_with_children([::MinistryRole.find(2)])
+    assert_equal([], ministries)
+
+    ministries = ::Person.find(50000).ministries_involved_in_with_children([::MinistryRole.find(1)])
+    assert_equal([::Ministry.find(1), ::Ministry.find(2), ::Ministry.find(3), ::Ministry.find(6)], ministries.sort! { |a,b| a.id <=>  b.id })
+  end
+
+  def test_campuses_under_my_ministries_with_children
+    campuses = ::Person.find(50000).campuses_under_my_ministries_with_children
+    assert_equal([::Campus.find(1), ::Campus.find(2), ::Campus.find(3)], campuses.sort! { |a,b| a.id <=>  b.id })
+
+    campuses = ::Person.find(50000).campuses_under_my_ministries_with_children([::MinistryRole.find(2)])
+    assert_equal([], campuses)
+
+    campuses = ::Person.find(50000).campuses_under_my_ministries_with_children([::MinistryRole.find(1)])
+    assert_equal([::Campus.find(1), ::Campus.find(2), ::Campus.find(3)], campuses.sort! { |a,b| a.id <=>  b.id })
+  end
+
   def test_map_cim_hrdb_to_mt
     setup_assignments
     CampusInvolvement.delete_all
@@ -209,13 +238,6 @@ class PersonTest < ActiveSupport::TestCase
 
     p = ::Person.find_user(p, a)
     assert_equal(p.user.user_id, p.email)
-  end
-
-  def test_search
-    assert_equal([Factory(:person_1)], ::Person.search("Josh", 1, 10))
-    assert_equal([::Person.find(2)], ::Person.search("A2", 1, 10))
-    assert_equal(::Person.all(:conditions => "person_id IN (1, 2, 3, 111, 50000)"), ::Person.search("A", 1, 10))
-    assert_equal(nil, ::Person.search(nil, 1, 1))
   end
 
   def test_is_student
@@ -676,7 +698,7 @@ class PersonTest < ActiveSupport::TestCase
   def test_search
     assert_equal([Factory(:person_1)], Person.search("Josh", 1, 10))
     assert_equal([Person.find(2)], Person.search("A2", 1, 10))
-    assert_equal(Person.all(:conditions => "id IN (1, 2, 3, 111, 50000)"), ::Person.search("A", 1, 10))
+    assert_equal(Person.all(:conditions => "#{Person._(:id)} IN (1, 2, 3, 111, 50000)"), ::Person.search("A", 1, 10))
     assert_equal(nil, Person.search(nil, 1, 1))
   end
 
