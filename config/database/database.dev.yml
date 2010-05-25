@@ -5,7 +5,7 @@ File.read(file).chomp
 %>
 
 development:
-  database: mh_common_test
+  database: utopian_cdm_dev
   <<: *defaults
 
 test:
