@@ -233,6 +233,14 @@ class BootstrapCore < ActiveRecord::Migration
       t.datetime "updated_at"
     end
 
+    create_table "staff", :force => true do |t|
+      t.integer "ministry_id"
+      t.integer "person_id"
+      t.date    "created_at"
+    end
+
+    add_index "staff", ["ministry_id"], :name => "index_staff_on_ministry_id"
+
     create_table "states", :force => true do |t|
       t.string   "name"
       t.string   "abbreviation"
