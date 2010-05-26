@@ -1,4 +1,0 @@
-defaults: &defaults
-  adapter: mysql
-  username: root
-  password:
