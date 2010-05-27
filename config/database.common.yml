@@ -1,0 +1,2 @@
+<% require 'common/database' %>
+<%= Cdm::Database.database_yml %>
