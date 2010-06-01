@@ -1,2 +1,2 @@
-<% require 'common/database' %>
-<%= Cdm::Database.database_yml %>
+<% require 'vendor/plugins/moonshine_multisite/lib/database_yml' %>
+<%= DatabaseYml.database_yml %>
