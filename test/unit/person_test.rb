@@ -9,7 +9,7 @@ class PersonTest < ActiveSupport::TestCase
 
   def setup
     setup_n_campus_involvements(10)
-    setup_addresses
+    #setup_addresses
     setup_campuses
     setup_ministries
     setup_genders
@@ -216,6 +216,7 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal(Factory(:schoolyear_3).name, p.campus_involvements.first.school_year.name)
   end
 
+=begin
   def test_find_user
     p = Factory(:person_1)
     a = Factory(:address_1)
@@ -231,7 +232,9 @@ class PersonTest < ActiveSupport::TestCase
     p = ::Person.find_user(p, a)
     assert_equal(u, p.user)
   end
+=end
 
+=begin
   def test_find_user_no_user
     p = Factory(:person_1)
     a = Factory(:address_1)
@@ -239,6 +242,7 @@ class PersonTest < ActiveSupport::TestCase
     p = ::Person.find_user(p, a)
     assert_equal(p.user.user_id, p.email)
   end
+=end
 
   def test_is_student
     p = Factory(:person_1)
@@ -304,6 +308,7 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal(@sue, Person.find_exact(@sue, @sue.current_address))
   end
 
+=begin
   def test_find_exact_from_orphan_user
     #test orphan user
     u = User.new(:username => "orphan@user.com", :person_id => nil, :guid => "",
@@ -313,6 +318,7 @@ class PersonTest < ActiveSupport::TestCase
     a.save
     assert_equal(u, Person.find_exact(Factory(:person_1), a).user)
   end
+=end
 
   def test_full_name
     assert_equal('Josh Starcher', @josh.full_name)
