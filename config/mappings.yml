@@ -5,7 +5,7 @@
 lib_path: vendor/plugins/movement_tracker_canada/app/models
 
 databases:
-  <%= "intranet_#{RAILS_ENV}" %>: user, person, access, campus, school_year, year_in_school, campus, assignment, assignmentstatus, cim_hrdb_current_address, cim_hrdb_permanent_address, country, title, emerg, gender, region, state, cim_hrdb_admin, cim_hrdb_priv, cim_hrdb_staff, cim_hrdb_person_year, accountadmin_accessgroup, accountadmin_accountadminaccess, accountadmin_accesscategory, accountadmin_accountgroup, accountadmin_language, accountadmin_vieweraccessgroup, site_multilingual_label, month, prc, prcmethod, semester, week, weekly_report, year, campus_access, cash_transaction, data_type, event, event_admin, field, field_type, field_value, price_rule, price_rule_type, registration, registration_status, scholarship, super_admin
+  <%= "intranet_#{RAILS_ENV}" %>: user, person, access, campus, school_year, year_in_school, campus, assignment, assignmentstatus, cim_hrdb_current_address, cim_hrdb_permanent_address, country, title, emerg, gender, region, state, cim_hrdb_admin, cim_hrdb_priv, cim_hrdb_staff, cim_hrdb_person_year, accountadmin_accessgroup, accountadmin_accountadminaccess, accountadmin_accesscategory, accountadmin_accountgroup, accountadmin_language, accountadmin_vieweraccessgroup, site_multilingual_label, month, prc, prcmethod, semester, week, weekly_report, year, campus_access, cash_transaction, data_type, event, event_admin, field, field_type, field_value, price_rule, price_rule_type, registration, registration_status, scholarship, super_admin, staff
 
 tables:
   user: accountadmin_viewer
@@ -33,6 +33,7 @@ tables:
   cim_hrdb_admin: cim_hrdb_admin
   cim_hrdb_priv: cim_hrdb_priv
   cim_hrdb_staff: cim_hrdb_staff
+  staff: cim_hrdb_staff
   cim_hrdb_person_year: cim_hrdb_person_year
   site_multilingual_label: site_multilingual_label
   month: cim_stats_month
