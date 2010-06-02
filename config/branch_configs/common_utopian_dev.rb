@@ -1,5 +1,5 @@
 module Common
-  SERVER = "c4c"
+  SERVER = "utopian"
   APP = "common"
   STAGE = "dev"
   DISABLE_MOONSHINE = true
