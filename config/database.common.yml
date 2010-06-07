@@ -1,3 +1,2 @@
-<% require "#{RAILS_ROOT}/vendor/plugins/git_branch_configs/init" %>
-<% require "vendor/plugins/moonshine_multisite/lib/database_yml" %>
+<% require 'vendor/plugins/moonshine_multisite/lib/database_yml' %>
 <%= DatabaseYml.database_yml %>
