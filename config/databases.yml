@@ -8,3 +8,5 @@
 - /dev/: database/database.dev.yml
 - /master/: database/database.dev.yml
 - c4c.dev: database/database.c4c.dev.yml
+- c4c.staging: database/database.c4c.staging.yml
+- c4c.prod: database/database.c4c.prod.yml

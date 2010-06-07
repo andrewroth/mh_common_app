@@ -1,6 +1,22 @@
-Run the tests with
+How to run test coverage for Canadian code:
 
-git submodule init
-git submodule update
-rake db:reset
-rake test:coverage:plugin:units PLUGIN=mh_common
+  rake db:create:all
+  rake db:test:prepare:all
+
+  rake test:coverage:plugin:units PLUGIN=mh_common/lib/common/core/ca/\\\|mh_common/lib/legacy/\\\|mh_common/lib/pulse/ca/
+
+without reg:
+
+  rake test:coverage:plugin:units PLUGIN=mh_common/lib/common/core/ca/\\\|mh_common/lib/legacy/\\\(accountadmin\\\|hrdb\\\|site\\\|stats\\\)/\\\|mh_common/lib/pulse/ca/
+
+To make things easier you can create a shell alias, to do this with the Bash shell open ~/.bashrc and paste in the following line:
+
+  alias rtcpuca="rake test:coverage:plugin:units PLUGIN=mh_common/lib/common/core/ca/\\\\\|mh_common/lib/legacy/\\\\\|mh_common/lib/pulse/"
+
+  TODO: Sheldon to make an alias of the without-reg version
+
+  rtcpuca stands for "rake test:coverage:plugin:units canada"
+
+individual file and test:
+
+rcov --rails -Ilib:test --sort coverage --text-report --exclude "gems/*" --exclude "Library/Frameworks/*" --exclude "^(\?\!(mh_common/lib/common/core/ca/\|mh_common/lib/legacy/\|mh_common/lib/pulse/))" --include-file /mh_common/lib/common/core/ca/\|mh_common/lib/legacy/\|mh_common/lib/pulse// test/unit/person_test.rb -- -n test_name
