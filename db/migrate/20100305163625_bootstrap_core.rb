@@ -90,7 +90,7 @@ class BootstrapCore < ActiveRecord::Migration
 
     add_index "dorms", ["campus_id"], :name => "index_dorms_on_campus_id"
 
-    create_table "emergs", :primary_key => "emerg_id", :force => true do |t|
+    create_table "emergs", :force => true do |t|
       t.integer "person_id"
       t.string  "passport_num"
       t.string  "passport_origin"
