@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100305163625) do
+ActiveRecord::Schema.define(:version => 20100825073929) do
 
   create_table "addresses", :force => true do |t|
     t.integer "person_id"
@@ -151,9 +151,13 @@ ActiveRecord::Schema.define(:version => 20100305163625) do
     t.date    "created_at"
     t.date    "updated_at"
     t.integer "ministries_count"
+    t.integer "lft"
+    t.integer "rgt"
   end
 
+  add_index "ministries", ["lft"], :name => "index_ministries_on_lft"
   add_index "ministries", ["parent_id"], :name => "index_ministries_on_parent_id"
+  add_index "ministries", ["rgt"], :name => "index_ministries_on_rgt"
 
   create_table "ministry_campuses", :force => true do |t|
     t.integer "ministry_id"
