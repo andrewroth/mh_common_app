@@ -227,10 +227,12 @@ ActiveRecord::Schema.define(:version => 20100825073929) do
   add_index "free_times", ["timetable_id"], :name => "free_times_timetable_id"
 
   create_table "group_involvements", :force => true do |t|
-    t.integer "person_id"
-    t.integer "group_id"
-    t.string  "level"
-    t.boolean "requested"
+    t.integer  "person_id"
+    t.integer  "group_id"
+    t.string   "level"
+    t.boolean  "requested"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "group_involvements", ["person_id", "group_id"], :name => "person_id_group_id", :unique => true
@@ -320,10 +322,10 @@ ActiveRecord::Schema.define(:version => 20100825073929) do
     t.integer "rgt"
   end
 
-  add_index "ministries", ["lft"], :name => "index_c4c_pulse_staging.ministries_on_lft"
-  add_index "ministries", ["parent_id"], :name => "index_c4c_pulse_staging.ministries_on_parent_id"
+  add_index "ministries", ["lft"], :name => "index_c4c_pulse_prod.ministries_on_lft"
+  add_index "ministries", ["parent_id"], :name => "index_c4c_pulse_prod.ministries_on_parent_id"
   add_index "ministries", ["parent_id"], :name => "index_ministries_on_parent_id"
-  add_index "ministries", ["rgt"], :name => "index_c4c_pulse_staging.ministries_on_rgt"
+  add_index "ministries", ["rgt"], :name => "index_c4c_pulse_prod.ministries_on_rgt"
 
   create_table "ministry_campuses", :force => true do |t|
     t.integer "ministry_id"
