@@ -55,43 +55,43 @@ class UserTest < ActiveSupport::TestCase
     cast = CasTicket.new
     casr = CasReceipt.new
     cast.stubs(:response).returns(casr)
-    casr.stubs(:user).returns("test_username")
+    casr.stubs(:user).returns("test@username.com")
 
     u = User.find_or_create_from_cas(cast)
 
-    assert_equal("test_username", u.username)
+    assert_equal("test@username.com", u.username)
     assert_equal(atts["ssoGuid"], u.guid)
     assert_equal(atts["firstName"], u.person.first_name)
     assert_equal(atts["lastName"], u.person.last_name)
 
 
     # test user already exists with guid
-    User.new(:username => "test_username_2", :guid => "test_guid_2").save
+    User.new(:username => "test@username-2.com", :guid => "test_guid_2").save
     atts["ssoGuid"] = "test_guid_2"
     
     cast = CasTicket.new
     casr = CasReceipt.new
     cast.stubs(:response).returns(casr)
-    casr.stubs(:user).returns("test_username_2")
+    casr.stubs(:user).returns("test@username-2.com")
 
     u = User.find_or_create_from_cas(cast)
 
-    assert_equal("test_username_2", u.username)
+    assert_equal("test@username-2.com", u.username)
     assert_equal(atts["ssoGuid"], u.guid)
 
 
     # test user already exists but without guid
-    User.new(:username => "test_username_3", :guid => "").save
+    User.new(:username => "test@username-3.com", :guid => "").save
     atts["ssoGuid"] = "test_guid_3"
 
     cast = CasTicket.new
     casr = CasReceipt.new
     cast.stubs(:response).returns(casr)
-    casr.stubs(:user).returns("test_username_3")
+    casr.stubs(:user).returns("test@username-3.com")
 
     u = User.find_or_create_from_cas(cast)
 
-    assert_equal("test_username_3", u.username)
+    assert_equal("test@username-3.com", u.username)
     assert_equal(atts["ssoGuid"], u.guid)
   end
 end
