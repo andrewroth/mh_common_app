@@ -25,11 +25,11 @@ class MinistryTest < ActiveSupport::TestCase
   end
   
   def test_campus_ids
-    assert_equal([1,3,2], @m[1].campus_ids)
+    assert_array_similarity([1,3], @m[1].campus_ids)
   end
   
   def test_descendants
-    assert_equal([@m[3]], @m[2].descendants)
+    assert_array_similarity([@m[3]], @m[2].descendants)
   end
   
   def test_root
@@ -37,15 +37,15 @@ class MinistryTest < ActiveSupport::TestCase
   end
   
   def test_self_plus_descendants
-    assert_equal([@m[2], @m[3]], @m[2].self_plus_descendants)
+    assert_array_similarity([@m[2], @m[3]], @m[2].self_plus_descendants)
   end
 
   def test_staff
-    assert_equal Ministry.find(1).staff, [ Person.find(50000) ]
+    assert_equal [ Person.find(50000) ], Ministry.find(1).staff
   end
 
   def test_leaders
-    assert_equal Ministry.find(1).leaders, [ Person.find(50000) ]
+    assert_equal  [ Person.find(50000) ], Ministry.find(1).leaders
   end
 
   def test_ministry_roles
@@ -85,11 +85,13 @@ class MinistryTest < ActiveSupport::TestCase
   end
 
   def test_ancestors
-    assert_equal(Factory(:ministry_5).ancestors, [Factory(:ministry_5), Factory(:ministry_4)])
+    # ancestors doesn't return self
+    assert_array_similarity([Factory(:ministry_4)], Factory(:ministry_5).ancestors)
   end
 
   def test_ancestor_ids
-    assert_equal(Factory(:ministry_5).ancestor_ids, [Factory(:ministry_5).id, Factory(:ministry_4).id])
+    # ancestor_ids returns self and ancestors
+    assert_array_similarity([Factory(:ministry_5).id, Factory(:ministry_4).id], Factory(:ministry_5).ancestor_ids)
   end
 
   def test_subministry_campuses
@@ -97,7 +99,7 @@ class MinistryTest < ActiveSupport::TestCase
   end
 
   def test_unique_ministry_campuses
-    assert_equal([Factory(:ministrycampus_3), Factory(:ministrycampus_1), Factory(:ministrycampus_2)], Factory(:ministry_1).unique_ministry_campuses)
+    assert_array_similarity([Factory(:campus_2)], Factory(:ministry_1).unique_ministry_campuses)
   end
 
   def test_student_role_ids
