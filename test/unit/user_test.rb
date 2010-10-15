@@ -99,11 +99,11 @@ class UserTest < ActiveSupport::TestCase
     cast = CasTicket.new
     casr = CasReceipt.new
     cast.stubs(:response).returns(casr)
-    casr.stubs(:user).returns("test_username")
+    casr.stubs(:user).returns("test@username.com")
 
     u = User.find_or_create_from_cas(cast)
 
-    assert_equal("test_username", u.username)
+    assert_equal("test@username.com", u.username)
     assert_equal(atts["ssoGuid"], u.guid)
     assert_equal(atts["firstName"], u.person.first_name)
     assert_equal(atts["lastName"], u.person.last_name)
@@ -119,26 +119,26 @@ class UserTest < ActiveSupport::TestCase
     cast = CasTicket.new
     casr = CasReceipt.new
     cast.stubs(:response).returns(casr)
-    casr.stubs(:user).returns("test_username_2")
+    casr.stubs(:user).returns("test@username-2.com")
 
     u = User.find_or_create_from_cas(cast)
 
-    assert_equal("test_username_2", u.username)
+    assert_equal("test@username-2.com", u.username)
     assert_equal(atts["ssoGuid"], u.guid)
 
 
     # test user already exists but without guid
-    User.new(:username => "test_username_3", :guid => "", :last_login => Date.today).save
+    User.new(:username => "test@username-3.com", :guid => "", :last_login => Date.today).save
     atts["ssoGuid"] = "test_guid_3"
 
     cast = CasTicket.new
     casr = CasReceipt.new
     cast.stubs(:response).returns(casr)
-    casr.stubs(:user).returns("test_username_3")
+    casr.stubs(:user).returns("test@username-3.com")
 
     u = User.find_or_create_from_cas(cast)
 
-    assert_equal("test_username_3", u.username)
+    assert_equal("test@username-3.com", u.username)
     assert_equal(atts["ssoGuid"], u.guid)
    
     # test rescues the viewer_userID set from receipt.user when receipt.user is too short
