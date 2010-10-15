@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100825073929) do
+ActiveRecord::Schema.define(:version => 20101006140757) do
 
   create_table "addresses", :force => true do |t|
     t.integer "person_id"
@@ -213,6 +213,28 @@ ActiveRecord::Schema.define(:version => 20100825073929) do
     t.datetime "updated_at"
   end
 
+  create_table "event_campuses", :force => true do |t|
+    t.integer  "event_id"
+    t.integer  "campus_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "event_groups", :force => true do |t|
+    t.string   "title"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "events", :force => true do |t|
+    t.integer  "registrar_event_id"
+    t.integer  "event_group_id"
+    t.string   "register_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "free_times", :force => true do |t|
     t.integer  "start_time"
     t.integer  "end_time"
@@ -227,10 +249,12 @@ ActiveRecord::Schema.define(:version => 20100825073929) do
   add_index "free_times", ["timetable_id"], :name => "free_times_timetable_id"
 
   create_table "group_involvements", :force => true do |t|
-    t.integer "person_id"
-    t.integer "group_id"
-    t.string  "level"
-    t.boolean "requested"
+    t.integer  "person_id"
+    t.integer  "group_id"
+    t.string   "level"
+    t.boolean  "requested"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "group_involvements", ["person_id", "group_id"], :name => "person_id_group_id", :unique => true
@@ -267,11 +291,13 @@ ActiveRecord::Schema.define(:version => 20100825073929) do
     t.integer "day"
     t.integer "group_type_id"
     t.boolean "needs_approval"
+    t.integer "semester_id"
   end
 
   add_index "groups", ["campus_id"], :name => "index_groups_on_campus_id"
   add_index "groups", ["dorm_id"], :name => "index_groups_on_dorm_id"
   add_index "groups", ["ministry_id"], :name => "index_groups_on_ministry_id"
+  add_index "groups", ["semester_id"], :name => "index_emu.groups_on_semester_id"
 
   create_table "imports", :force => true do |t|
     t.integer  "person_id"
@@ -316,14 +342,15 @@ ActiveRecord::Schema.define(:version => 20100825073929) do
     t.date    "created_at"
     t.date    "updated_at"
     t.integer "ministries_count"
+    t.string  "type"
     t.integer "lft"
     t.integer "rgt"
   end
 
-  add_index "ministries", ["lft"], :name => "index_c4c_pulse_staging.ministries_on_lft"
-  add_index "ministries", ["parent_id"], :name => "index_c4c_pulse_staging.ministries_on_parent_id"
+  add_index "ministries", ["lft"], :name => "index_emu.ministries_on_lft"
+  add_index "ministries", ["parent_id"], :name => "index_emu.ministries_on_parent_id"
   add_index "ministries", ["parent_id"], :name => "index_ministries_on_parent_id"
-  add_index "ministries", ["rgt"], :name => "index_c4c_pulse_staging.ministries_on_rgt"
+  add_index "ministries", ["rgt"], :name => "index_emu.ministries_on_rgt"
 
   create_table "ministry_campuses", :force => true do |t|
     t.integer "ministry_id"
@@ -491,6 +518,11 @@ ActiveRecord::Schema.define(:version => 20100825073929) do
     t.datetime "updated_at"
   end
 
+  create_table "strategies", :force => true do |t|
+    t.string "name"
+    t.string "abbrv"
+  end
+
   create_table "summer_project_applications", :force => true do |t|
     t.integer  "summer_project_id"
     t.integer  "person_id"
@@ -547,7 +579,7 @@ ActiveRecord::Schema.define(:version => 20100825073929) do
   create_table "user_codes", :force => true do |t|
     t.integer "user_id"
     t.string  "code"
-    t.string  "pass"
+    t.text    "pass"
   end
 
   add_index "user_codes", ["user_id"], :name => "index_user_codes_on_user_id"
