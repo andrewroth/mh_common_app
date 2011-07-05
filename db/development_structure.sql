@@ -24,6 +24,16 @@ CREATE TABLE `addresses` (
   KEY `index_addresses_on_person_id` (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `api_keys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `login_code_id` int(11) DEFAULT NULL,
+  `purpose` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
 CREATE TABLE `campus_involvements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `person_id` int(11) DEFAULT NULL,
@@ -1309,6 +1319,14 @@ INSERT INTO schema_migrations (version) VALUES ('20110520215405');
 INSERT INTO schema_migrations (version) VALUES ('20110602142800');
 
 INSERT INTO schema_migrations (version) VALUES ('20110602175650');
+
+INSERT INTO schema_migrations (version) VALUES ('20110610200458');
+
+INSERT INTO schema_migrations (version) VALUES ('20110610222433');
+
+INSERT INTO schema_migrations (version) VALUES ('20110617201034');
+
+INSERT INTO schema_migrations (version) VALUES ('20110705155516');
 
 INSERT INTO schema_migrations (version) VALUES ('21');
 
