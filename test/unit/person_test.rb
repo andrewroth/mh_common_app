@@ -715,6 +715,56 @@ class PersonTest < ActiveSupport::TestCase
     assert_equal([ Person.find(1), Person.find(2), Person.find(3), Person.find(50000), Person.find(111)], ::Person.search_by_name("A"))
     assert_equal(nil, Person.search_by_name(nil))
   end
+  
+  def test_find_and_associate_person_to_event_attendee
+    Factory(:access_2)
+    Factory(:event_1)
+    Factory(:event_group_1)
+    Factory(:event_campus_1)
+    event_attendee_1 = Factory(:event_1_attendee_1)
+    event_attendee_2 = Factory(:event_1_attendee_2)
+    matching_person = Factory(:person_2)
+    
+    Factory(:campusinvolvement_6)
+    
+    # match by email
+    result = Person.find_and_associate_person_to_event_attendee(event_attendee_1)
+    assert result
+    assert_equal matching_person, result
+    
+    # match by name
+    matching_person.user.username = "not.fred@someotherplace.com"
+    matching_person.user.save
+    result = Person.find_and_associate_person_to_event_attendee(event_attendee_1)
+    assert_equal matching_person, result
+    
+    # no match
+    result = Person.find_and_associate_person_to_event_attendee(event_attendee_2)
+    assert_nil result
+  end
+  
+  def test_update_from_latest_event_attendee
+    Factory(:access_2)
+    Factory(:event_1)
+    Factory(:event_group_1)
+    Factory(:event_campus_1)
+    event_attendee_1 = Factory(:event_1_attendee_1)
+    event_attendee_2 = Factory(:event_1_attendee_2)
+    person = Factory(:person_2)
+    Factory(:person_event_attendee_1)
+    
+    person.updated_at = 2.days.ago
+    event_attendee_1.ticket_updated_at = 1.day.ago
+    event_attendee_1.save
+    
+    person.email = person.user.username
+    
+    person.update_from_latest_event_attendee
+    
+    assert_equal event_attendee_1.cell_phone, person.cell_phone
+    assert_equal event_attendee_1.home_phone, person.current_address.phone
+    assert_not_nil person.campus_involvements.try(:first)
+  end
 end
 
 class GcxTicket ; end
