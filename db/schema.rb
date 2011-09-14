@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101006140757) do
+ActiveRecord::Schema.define(:version => 20110720155454) do
 
   create_table "addresses", :force => true do |t|
     t.integer "person_id"
@@ -35,6 +35,14 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
 
   add_index "addresses", ["email"], :name => "index_addresses_on_email"
   add_index "addresses", ["person_id"], :name => "index_addresses_on_person_id"
+
+  create_table "api_keys", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "login_code_id"
+    t.string   "purpose"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "campus_involvements", :force => true do |t|
     t.integer "person_id"
@@ -181,6 +189,13 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
     t.datetime "updated_at"
   end
 
+  create_table "dismissed_notices", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "notice_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "dorms", :force => true do |t|
     t.integer "campus_id"
     t.string  "name"
@@ -213,6 +228,26 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
     t.datetime "updated_at"
   end
 
+  create_table "event_attendees", :force => true do |t|
+    t.integer  "event_id"
+    t.integer  "ticket_id"
+    t.datetime "ticket_updated_at"
+    t.string   "email"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "gender"
+    t.string   "campus"
+    t.string   "year_in_school"
+    t.string   "home_phone"
+    t.string   "cell_phone"
+    t.string   "work_phone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "event_attendees", ["event_id"], :name => "index_c4c_pulse_dev.event_attendees_on_event_id"
+  add_index "event_attendees", ["ticket_id"], :name => "index_c4c_pulse_dev.event_attendees_on_ticket_id"
+
   create_table "event_campuses", :force => true do |t|
     t.integer  "event_id"
     t.integer  "campus_id"
@@ -233,6 +268,11 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
     t.string   "register_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "title"
+    t.text     "description"
+    t.datetime "synced_at"
+    t.datetime "start_date"
+    t.datetime "end_date"
   end
 
   create_table "free_times", :force => true do |t|
@@ -247,6 +287,128 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
   end
 
   add_index "free_times", ["timetable_id"], :name => "free_times_timetable_id"
+
+  create_table "global_areas", :force => true do |t|
+    t.string   "area"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "global_countries", :force => true do |t|
+    t.string   "name"
+    t.integer  "global_area_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "iso3"
+    t.integer  "stage"
+    t.integer  "live_exp"
+    t.integer  "live_dec"
+    t.integer  "new_grth_mbr"
+    t.integer  "mvmt_mbr"
+    t.integer  "mvmt_ldr"
+    t.integer  "new_staff"
+    t.integer  "lifetime_lab"
+    t.integer  "pop_2010"
+    t.integer  "pop_2015"
+    t.integer  "pop_2020"
+    t.integer  "pop_wfb_gdppp"
+    t.float    "perc_christian"
+    t.float    "perc_evangelical"
+    t.integer  "virtually_led_live_exp"
+    t.integer  "virtually_led_live_dec"
+    t.integer  "virtually_led_new_grth_mbr"
+    t.integer  "virtually_led_mvmt_mbr"
+    t.integer  "virtually_led_mvmt_ldr"
+    t.integer  "virtually_led_new_staff"
+    t.integer  "virtually_led_lifetime_lab"
+    t.integer  "church_led_live_exp"
+    t.integer  "church_led_live_dec"
+    t.integer  "church_led_new_grth_mbr"
+    t.integer  "church_led_mvmt_mbr"
+    t.integer  "church_led_mvmt_ldr"
+    t.integer  "church_led_new_staff"
+    t.integer  "church_led_lifetime_lab"
+    t.integer  "leader_led_live_exp"
+    t.integer  "leader_led_live_dec"
+    t.integer  "leader_led_new_grth_mbr"
+    t.integer  "leader_led_mvmt_mbr"
+    t.integer  "leader_led_mvmt_ldr"
+    t.integer  "leader_led_new_staff"
+    t.integer  "leader_led_lifetime_lab"
+    t.integer  "student_led_live_exp"
+    t.integer  "student_led_live_dec"
+    t.integer  "student_led_new_grth_mbr"
+    t.integer  "student_led_mvmt_mbr"
+    t.integer  "student_led_mvmt_ldr"
+    t.integer  "student_led_new_staff"
+    t.integer  "student_led_lifetime_lab"
+    t.integer  "locally_funded_FY10"
+    t.integer  "total_income_FY10"
+    t.integer  "staff_count_2002"
+    t.integer  "staff_count_2009"
+    t.integer  "total_students"
+    t.integer  "total_schools"
+    t.integer  "total_spcs"
+    t.string   "names_priority_spcs"
+    t.integer  "total_spcs_presence"
+    t.integer  "total_spcs_movement"
+    t.integer  "total_slm_staff"
+    t.integer  "total_new_slm_staff"
+  end
+
+  create_table "global_dashboard_accesses", :force => true do |t|
+    t.string   "guid"
+    t.string   "fn"
+    t.string   "ln"
+    t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "admin",      :default => false
+  end
+
+  create_table "global_dashboard_whq_stats", :force => true do |t|
+    t.string   "mcc"
+    t.integer  "month_id"
+    t.integer  "global_country_id"
+    t.integer  "live_exp"
+    t.integer  "live_dec"
+    t.integer  "new_grth_mbr"
+    t.integer  "mvmt_mbr"
+    t.integer  "mvmt_ldr"
+    t.integer  "new_staff"
+    t.integer  "lifetime_lab"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "global_profiles", :force => true do |t|
+    t.string   "gender"
+    t.string   "marital_status"
+    t.string   "language"
+    t.string   "mission_critical_components"
+    t.string   "funding_source"
+    t.string   "staff_status"
+    t.string   "employment_country"
+    t.string   "ministry_location_country"
+    t.string   "position"
+    t.string   "scope"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "group_invitations", :force => true do |t|
+    t.integer  "group_id"
+    t.string   "recipient_email"
+    t.integer  "recipient_person_id"
+    t.integer  "sender_person_id"
+    t.boolean  "accepted"
+    t.integer  "login_code_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "group_invitations", ["group_id"], :name => "index_c4c_pulse_dev.group_invitations_on_group_id"
+  add_index "group_invitations", ["login_code_id"], :name => "index_c4c_pulse_dev.group_invitations_on_login_code_id"
 
   create_table "group_involvements", :force => true do |t|
     t.integer  "person_id"
@@ -269,8 +431,11 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
     t.integer  "unsuitability_leader"
     t.integer  "unsuitability_coleader"
     t.integer  "unsuitability_participant"
-    t.string   "collection_group_name",     :default => "{{campus}} interested in a {{group_type}}"
-    t.boolean  "has_collection_groups",     :default => false
+    t.string   "collection_group_name",      :default => "{{campus}} interested in a {{group_type}}"
+    t.boolean  "has_collection_groups",      :default => false
+    t.boolean  "in_directory_search_not_in", :default => false
+    t.string   "short_name"
+    t.boolean  "in_directory_search_in",     :default => false
   end
 
   create_table "groups", :force => true do |t|
@@ -292,6 +457,7 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
     t.integer "group_type_id"
     t.boolean "needs_approval"
     t.integer "semester_id"
+    t.boolean "show_group_info", :default => false
   end
 
   add_index "groups", ["campus_id"], :name => "index_groups_on_campus_id"
@@ -326,6 +492,38 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "label_people", :force => true do |t|
+    t.integer  "label_id"
+    t.integer  "person_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "labels", :force => true do |t|
+    t.string   "content"
+    t.integer  "priority",   :default => 1
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "locks", :force => true do |t|
+    t.string   "name"
+    t.boolean  "locked"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "login_codes", :force => true do |t|
+    t.boolean  "acceptable", :default => true
+    t.integer  "times_used", :default => 0
+    t.string   "code"
+    t.datetime "expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "login_codes", ["code"], :name => "index_c4c_pulse_dev.login_codes_on_code"
 
   create_table "ministries", :force => true do |t|
     t.integer "parent_id"
@@ -390,6 +588,13 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
 
   add_index "ministry_roles", ["ministry_id"], :name => "index_ministry_roles_on_ministry_id"
 
+  create_table "notices", :force => true do |t|
+    t.text     "message"
+    t.boolean  "live"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "people", :force => true do |t|
     t.integer "user_id"
     t.string  "first_name"
@@ -425,6 +630,16 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
     t.string "controller"
     t.string "action"
   end
+
+  create_table "person_event_attendees", :force => true do |t|
+    t.integer  "person_id"
+    t.integer  "event_attendee_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "person_event_attendees", ["event_attendee_id"], :name => "index_c4c_pulse_dev.person_event_attendees_on_event_attendee_id"
+  add_index "person_event_attendees", ["person_id"], :name => "index_c4c_pulse_dev.person_event_attendees_on_person_id"
 
   create_table "person_extras", :force => true do |t|
     t.integer "person_id"
@@ -537,11 +752,21 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
     t.datetime "updated_at"
   end
 
+  create_table "temp_group_involvements", :id => false, :force => true do |t|
+    t.integer "person_id"
+    t.string  "group_involvements"
+  end
+
+  add_index "temp_group_involvements", ["person_id"], :name => "index_temp_group_involvements_on_person_id"
+
   create_table "timetables", :force => true do |t|
     t.integer  "person_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "updated_by_person_id"
   end
+
+  add_index "timetables", ["person_id"], :name => "index_emu.timetables_on_person_id"
 
   create_table "training_answers", :force => true do |t|
     t.integer  "training_question_id"
@@ -577,11 +802,15 @@ ActiveRecord::Schema.define(:version => 20101006140757) do
   end
 
   create_table "user_codes", :force => true do |t|
-    t.integer "user_id"
-    t.string  "code"
-    t.text    "pass"
+    t.integer  "user_id"
+    t.binary   "pass"
+    t.integer  "click_count",   :default => 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "login_code_id"
   end
 
+  add_index "user_codes", ["login_code_id"], :name => "index_c4c_pulse_dev.user_codes_on_login_code_id"
   add_index "user_codes", ["user_id"], :name => "index_user_codes_on_user_id"
 
   create_table "users", :force => true do |t|
