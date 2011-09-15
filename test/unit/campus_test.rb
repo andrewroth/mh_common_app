@@ -4,6 +4,7 @@ class CampusTest < ActiveSupport::TestCase
 
   def test_short_name
     campus = Factory(:campus_1)
+    campus.abbrv = nil
     assert_equal campus.short_name, campus.name
   end
   
