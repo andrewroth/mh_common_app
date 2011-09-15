@@ -44,7 +44,6 @@ class UserTest < ActiveSupport::TestCase
     Factory(:user_2)
     Factory(:user_3)
     Factory(:user_4)
-    setup_accountadmin_accountgroups
     assert_equal([Factory(:user_1)], ::User.search("josh", 1, 10))
     assert_equal([Factory(:user_4)], ::User.search("8a4ea810", 1, 10))
     assert_equal(::User.all(:conditions => "viewer_id IN (1, 2, 3)"), ::User.search("@", 1, 10))
