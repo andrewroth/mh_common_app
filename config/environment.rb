@@ -26,7 +26,7 @@ Rails::Initializer.run do |config|
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem "will_paginate", :version => '2.3.15'
-  config.gem "mysql2"
+  #config.gem "mysql2", '< 0.3'
   config.gem 'test-unit', :lib => 'test/unit'
   
   # Only load the plugins named here, in the order given (default is alphabetical).
