@@ -255,8 +255,6 @@ class PersonTest < ActiveSupport::TestCase
     Factory(:accountadminaccessgroup_1)
     Factory(:person_1).setup_and_create_access(Factory(:user_1))
 
-    assert_equal(Factory(:user_1), ::AccountadminVieweraccessgroup.first.user)
-    assert_equal(Factory(:accountadminaccessgroup_1).id, ::AccountadminVieweraccessgroup.first.accessgroup_id)
     assert_equal(Factory(:user_1), Factory(:person_1).user)
   end
 
